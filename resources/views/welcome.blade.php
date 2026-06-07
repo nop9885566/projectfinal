@@ -29,19 +29,17 @@
 {{-- ===== NAVBAR ===== --}}
 <nav id="navbar">
   <div class="nav-wrap">
-    <a href="#home" class="nav-logo">
+    <a href="/" class="nav-logo">
       <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#home"       class="active">หน้าแรก</a></li>
+      <li><a href="/" class="active">หน้าแรก</a></li>
       <li><a href="#about">เกี่ยวกับเรา</a></li>
-      <li><a href="#menu">เมนู</a></li>
-      <li><a href="#gallery">แกลเลอรี</a></li>
-      <li><a href="#promotions">โปรโมชัน</a></li>
-      <li><a href="#reviews">รีวิว</a></li>
+      <li><a href="/menu">เมนู</a></li>
+      <li><a href="/gallery">แกลเลอรี</a></li>
       <li><a href="#contact">ติดต่อ</a></li>
     </ul>
-    <button class="btn-nav" onclick="smoothScroll('menu')">สั่งเลย</button>
+    <button class="btn-nav" onclick="window.location.href='/menu'">สั่งเลย</button>
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -59,10 +57,10 @@
       <span class="hero-title-en">BARJONG CAFE</span>
     </h1>
     <p class="hero-sub">กาแฟดี · บรรยากาศธรรมชาติ · พื้นที่แห่งการพักผ่อน</p>
-    <div class="hero-btns">
-      <a href="#menu"    class="btn btn-primary"><i class="fa-solid fa-mug-hot"></i> ดูเมนู</a>
-      <a href="#contact" class="btn btn-glass"><i class="fa-solid fa-bag-shopping"></i> สั่งอาหาร</a>
-    </div>
+   <div class="hero-btns">
+  <a href="/menu" class="btn btn-primary"><i class="fa-solid fa-mug-hot"></i> ดูเมนู</a>
+  <a href="#contact" class="btn btn-glass"><i class="fa-solid fa-bag-shopping"></i> สั่งอาหาร</a>
+</div>
     <div class="hero-stats">
       <div class="text-center">
         <span class="stat-num">500+</span>
@@ -399,16 +397,15 @@
         </div>
       </div>
       <div>
-        <h4>เมนูลัด</h4>
-        <ul>
-          <li><a href="#home">หน้าแรก</a></li>
-          <li><a href="#about">เกี่ยวกับเรา</a></li>
-          <li><a href="#menu">เมนู</a></li>
-          <li><a href="#gallery">แกลเลอรี</a></li>
-          <li><a href="#promotions">โปรโมชัน</a></li>
-          <li><a href="#reviews">รีวิว</a></li>
-        </ul>
-      </div>
+  <h4>เมนูลัด</h4>
+  <ul>
+    <li><a href="/">หน้าแรก</a></li>
+    <li><a href="#about">เกี่ยวกับเรา</a></li>
+    <li><a href="/menu">เมนู</a></li>
+    <li><a href="/gallery">แกลเลอรี</a></li>
+    <li><a href="#contact">ติดต่อ</a></li>
+  </ul>
+</div>
       <div>
         <h4>บริการ</h4>
         <ul>
