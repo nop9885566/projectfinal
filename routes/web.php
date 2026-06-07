@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // พนักงาน + Admin เท่านั้น
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:staff,admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/dashboard/products', ProductController::class);
     Route::get('/dashboard/orders', [OrderController::class, 'manage'])->name('orders.manage');

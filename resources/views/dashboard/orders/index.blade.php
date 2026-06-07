@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จัดการออเดอร์ | บรรจงคาเฟ่</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ asset('css/cafe.css') }}" />
+</head>
+<body>
+
+<nav id="navbar" class="scrolled">
+  <div class="nav-wrap">
+    <a href="/" class="nav-logo">
+      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/dashboard/products">จัดการเมนู</a></li>
+      <li><a href="/dashboard/orders" class="active">จัดการออเดอร์</a></li>
+      <li><a href="/">หน้าเว็บ</a></li>
+    </ul>
+    <form method="POST" action="{{ route('logout') }}" style="margin:0">
+      @csrf
+      <button type="submit" class="btn-nav">ออกจากระบบ</button>
+    </form>
+  </div>
+</nav>
+
+<div style="padding: 120px 2rem 2rem">
+  <div class="container">
+
+    <h2 style="margin-bottom:2rem">จัดการออเดอร์</h2>
+
+    @if(session('success'))
+      <div style="background:#d4edda;color:#155724;padding:1rem;border-radius:8px;margin-bottom:1rem">
+        {{ session('success') }}
+      </div>
+    @endif
+
+    @forelse($orders as $order)
+    <div class="contact-card" style="margin-bottom:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <div>
+          <strong>ออเดอร์ #{{ $order->id }}</strong>
+          <span style="margin-left:1rem;color:#999;font-size:.9rem">{{ $order->created_at->format('d/m/Y H:i') }}</span>
+        </div>
+        <div>
+          <strong>{{ $order->user->name }}</strong>
+        </div>
+        <div>
+          <strong style="color:#7D8F69">฿{{ number_format($order->total_price, 2) }}</strong>
+        </div>
+
+        {{-- อัปเดตสถานะ --}}
+        <form method="POST" action="{{ route('orders.updateStatus', $order->id) }}" style="display:flex;gap:.5rem">
+          @csrf
+          @method('PATCH')
+          <select name="status"
+                  style="padding:.5rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
+            <option value="pending"    {{ $order->status=='pending'    ? 'selected' : '' }}>⏳ รอดำเนินการ</option>
+            <option value="confirmed"  {{ $order->status=='confirmed'  ? 'selected' : '' }}>✅ ยืนยันแล้ว</option>
+            <option value="preparing"  {{ $order->status=='preparing'  ? 'selected' : '' }}>👨‍🍳 กำลังเตรียม</option>
+            <option value="completed"  {{ $order->status=='completed'  ? 'selected' : '' }}>🎉 เสร็จแล้ว</option>
+            <option value="cancelled"  {{ $order->status=='cancelled'  ? 'selected' : '' }}>❌ ยกเลิก</option>
+          </select>
+          <button type="submit" class="btn btn-primary" style="padding:.5rem 1rem">อัปเดต</button>
+        </form>
+      </div>
+
+      {{-- รายการสินค้า --}}
+      <div style="margin-top:1rem;border-top:1px solid #eee;padding-top:1rem">
+        @foreach($order->orderItems as $item)
+          <div style="display:flex;justify-content:space-between;padding:.3rem 0">
+            <span>{{ $item->product->name }} x{{ $item->quantity }}</span>
+            <span>฿{{ number_format($item->price * $item->quantity, 2) }}</span>
+          </div>
+        @endforeach
+        @if($order->note)
+          <div style="margin-top:.5rem;color:#999;font-size:.9rem">📝 หมายเหตุ: {{ $order->note }}</div>
+        @endif
+      </div>
+    </div>
+    @empty
+      <div style="text-align:center;color:#999;padding:3rem">ยังไม่มีออเดอร์</div>
+    @endforelse
+
+  </div>
+</div>
+
+</body>
+</html>
