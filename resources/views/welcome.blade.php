@@ -20,7 +20,7 @@
 {{-- ===== LOADER ===== --}}
 <div id="loader">
   <div>
-    <div class="loader-logo">ยินดีต้อนรับ</div>
+    <div class="loader-logo">บ</div>
     <div class="loader-text">Barjong Cafe</div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
   </div>
