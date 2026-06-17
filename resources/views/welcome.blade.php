@@ -39,7 +39,15 @@
       <li><a href="/gallery">แกลเลอรี</a></li>
       <li><a href="#contact">ติดต่อ</a></li>
     </ul>
-    <button class="btn-nav" onclick="window.location.href='/menu'">สั่งเลย</button>
+    @auth
+      <a href="/orders" class="btn-nav">ออเดอร์ของฉัน</a>
+      <form method="POST" action="{{ route('logout') }}" style="margin:0">
+        @csrf
+        <button type="submit" class="btn-nav">ออกจากระบบ</button>
+      </form>
+    @else
+      <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
+    @endauth
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>
     </button>
