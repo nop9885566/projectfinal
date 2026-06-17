@@ -448,7 +448,7 @@
 
 <script>
 /* ── Loader ── */
-window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 4000));
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2000));
 
 /* ── Navbar scroll ── */
 const navbar = document.getElementById('navbar');
