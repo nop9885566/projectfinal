@@ -20,7 +20,6 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="/">หน้าแรก</a></li>
       <li><a href="/menu" class="active">เมนู</a></li>
-      <li><a href="/gallery">แกลเลอรี</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>

@@ -17,7 +17,7 @@
 <div id="loader">
   <div>
     <div class="loader-logo">B</div>
-    <div class="loader-text">Barjong Cafe</div>
+    <div class="loader-text">Banjong Cafe</div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
   </div>
 </div>
@@ -32,18 +32,10 @@
       <li><a href="/" class="active">หน้าแรก</a></li>
       <li><a href="#about">เกี่ยวกับเรา</a></li>
       <li><a href="/menu">เมนู</a></li>
-      <li><a href="/gallery">แกลเลอรี</a></li>
       <li><a href="#contact">ติดต่อ</a></li>
     </ul>
-    @auth
-      <a href="/orders" class="btn-nav">ออเดอร์ของฉัน</a>
-      <form method="POST" action="{{ route('logout') }}" style="margin:0">
-        @csrf
-        <button type="submit" class="btn-nav">ออกจากระบบ</button>
-      </form>
-    @else
-      <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
-    @endauth
+    <a href="/register" class="btn-nav" style="margin-right:4px">สมัครสมาชิก</a>
+    <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -52,10 +44,10 @@
 
 {{-- ===== HERO ===== --}}
 <section id="home">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" style="background-image: url('{{ asset('images/hero-bg.jpg') }}'); background-size:cover; background-position:center"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-badge">🌿 เปิดทุกวัน 07:00 – 20:00 น.</div>
+    <div class="hero-badge">🌿 เปิดทุกวัน 09:00 – 17:00 น. หยุดวันเสาร์</div>
     <h1>
       <span class="hero-title-th">บรรจงคาเฟ่</span>
       <span class="hero-title-en">BARJONG CAFE</span>
@@ -64,23 +56,7 @@
     <div class="hero-btns">
       <a href="/menu" class="btn btn-primary"><i class="fa-solid fa-mug-hot"></i> ดูเมนู</a>
       <a href="#contact" class="btn btn-glass"><i class="fa-solid fa-location-dot"></i> ติดต่อเรา</a>
-    </div>
-    <div class="hero-stats">
-      <div class="text-center">
-        <span class="stat-num">500+</span>
-        <span class="stat-lbl">รีวิวดีเยี่ยม</span>
-      </div>
-      <div class="stat-div"></div>
-      <div class="text-center">
-        <span class="stat-num">4.9</span>
-        <span class="stat-lbl">คะแนนเฉลี่ย</span>
-      </div>
-      <div class="stat-div"></div>
-      <div class="text-center">
-        <span class="stat-num">50+</span>
-        <span class="stat-lbl">รายการเมนู</span>
-      </div>
-    </div>
+    </div>    
   </div>
   <a href="#about" class="scroll-dot"></a>
 </section>
@@ -90,14 +66,18 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-imgs" data-reveal>
-        <div class="about-main">🏡</div>
+        <div class="about-main">
+          <img src="{{ asset('images/about-main.jpg') }}" style="width:100%;height:100%;object-fit:cover;border-radius:16px">
+        </div>
         <div class="about-float">
-          <div class="about-float-img">🌾</div>
+          <div class="about-float-img">
+            <img src="{{ asset('images/about-two.jpg') }}" style="width:100%;height:100%;object-fit:cover;border-radius:16px">
+          </div>
           <div class="about-float-info">
             <span style="font-size:1.6rem">🌿</span>
             <div>
               <strong>วิวธรรมชาติ</strong>
-              <small>ทุ่งนา & ต้นไม้</small>
+              <small>ทุ่งนา</small>
             </div>
           </div>
         </div>
@@ -122,14 +102,10 @@
           <div class="feature">
             <div class="feature-icon"><i class="fa-solid fa-wifi"></i></div>
             <div><strong>Free Wi-Fi ความเร็วสูง</strong><span>รองรับการทำงานและเรียน</span></div>
-          </div>
-          <div class="feature">
-            <div class="feature-icon"><i class="fa-solid fa-plug"></i></div>
-            <div><strong>ปลั๊กไฟทุกโต๊ะ</strong><span>ไม่ต้องกังวลเรื่องแบตเตอรี่</span></div>
-          </div>
+          </div>          
           <div class="feature">
             <div class="feature-icon">🍽️</div>
-            <div><strong>เมนูหลากหลาย</strong><span>กาแฟ เครื่องดื่ม เบเกอรี และอาหาร</span></div>
+            <div><strong>เมนูหลากหลาย</strong><span>กาแฟ เครื่องดื่ม เบเกอรี่</span></div>
           </div>
         </div>
       </div>
@@ -143,7 +119,7 @@
     <div class="sec-header" data-reveal>
       <div class="sec-tag">ติดต่อเรา</div>
       <h2 class="sec-title">มาเยี่ยมเราได้เลย</h2>
-      <p class="sec-desc">ยินดีต้อนรับทุกวัน ไม่มีวันหยุด</p>
+      <p class="sec-desc">ยินดีต้อนรับทุกวัน</p>
     </div>
     <div class="contact-grid">
       <div data-reveal>
@@ -152,34 +128,33 @@
             <div class="contact-ic">📍</div>
             <div>
               <strong>ที่อยู่</strong>
-              <p>123 ถนนธรรมชาติ ตำบลสวนงาม<br>อำเภอเมือง จังหวัดเชียงใหม่ 50000</p>
+              <p>122/10 ปากทางสลวงซอย 3 ตำบลขี้เหล็ก<br>อำเภอแม่ริม จังหวัดเชียงใหม่ 50180</p>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-ic">🕐</div>
             <div>
               <strong>เวลาเปิด-ปิด</strong>
-              <p>จันทร์ – ศุกร์: 07:00 – 20:00 น.<br>เสาร์ – อาทิตย์: 07:00 – 21:00 น.</p>
+              <p>จันทร์ – อาทิตย์: 09:00 – 17:00 น.<br>ปิดวันเสาร์</p>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-ic">📞</div>
             <div>
               <strong>โทรศัพท์</strong>
-              <a href="tel:+66812345678">081-234-5678</a>
+              <a href="tel:+66637916165">063-791-6165</a>
             </div>
           </div>
         </div>
         <div class="socials">
-          <a href="#" class="social-btn fb"><i class="fa-brands fa-facebook-f"></i> Barjong Cafe (Facebook)</a>
-          <a href="#" class="social-btn line"><i class="fa-brands fa-line"></i> @barjongcafe (LINE)</a>
-          <a href="#" class="social-btn ig"><i class="fa-brands fa-instagram"></i> @barjong.cafe (Instagram)</a>
+          <a href="https://www.facebook.com/banchongcafe" class="social-btn fb"><i class="fa-brands fa-facebook-f"></i> Barjong Cafe (Facebook)</a>          
+          <a href="https://www.instagram.com/banchong.cafe/" class="social-btn ig"><i class="fa-brands fa-instagram"></i> @barjong.cafe (Instagram)</a>
         </div>
       </div>
       <div data-reveal style="transition-delay:.15s">
         <div class="map-box">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d120282.86!2d98.9177!3d18.7883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da3a73%3A0x1!2z4LmA4LiH4Liy4Lin!5e0!3m2!1sth!2sth!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d213.34812649846685!2d98.9419983!3d19.014536!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da17f3e0a30d0b%3A0x4717c8c785505a09!2sBanchong%20cafe!5e1!3m2!1sth!2sth!4v1781681253758!5m2!1sth!2sth"
             width="100%" height="360"
             style="border:0" allowfullscreen loading="lazy"
             title="แผนที่บรรจงคาเฟ่">
@@ -198,10 +173,8 @@
         <div class="footer-logo"><i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่</div>
         <p>กาแฟดี บรรยากาศธรรมชาติ<br>พื้นที่แห่งการพักผ่อน</p>
         <div class="footer-soc">
-          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" aria-label="Line"><i class="fa-brands fa-line"></i></a>
-          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.facebook.com/banchongcafe" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/banchong.cafe/" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
       </div>
       <div>
@@ -210,7 +183,6 @@
           <li><a href="/">หน้าแรก</a></li>
           <li><a href="#about">เกี่ยวกับเรา</a></li>
           <li><a href="/menu">เมนู</a></li>
-          <li><a href="/gallery">แกลเลอรี</a></li>
           <li><a href="#contact">ติดต่อ</a></li>
         </ul>
       </div>
@@ -220,15 +192,12 @@
           <li><a href="#">Dine-in</a></li>
           <li><a href="#">Take Away</a></li>
           <li><a href="#">Delivery</a></li>
-          <li><a href="#">จองโต๊ะ</a></li>
-          <li><a href="#">Private Event</a></li>
         </ul>
       </div>
       <div>
         <h4>เวลาเปิดทำการ</h4>
-        <div class="hours-row"><span>จ–ศ</span><span>07:00 – 20:00</span></div>
-        <div class="hours-row"><span>ส–อ</span><span>07:00 – 21:00</span></div>
-        <div class="hours-row open-now">🟢 เปิดอยู่ตอนนี้</div>
+        <div class="hours-row"><span>จ–อา</span><span>09:00 – 17:00</span></div>
+        <div class="hours-row"><span>ส</span><span>ปิด</span></div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -238,8 +207,7 @@
   </div>
 </footer>
 
-{{-- Toast --}}
-<div id="toast">✅ เพิ่มลงในตะกร้าแล้ว!</div>
+
 
 {{-- Back to top --}}
 <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="back to top">
