@@ -1,0 +1,43 @@
+.git
+.gitignore
+.gitattributes
+.env
+.env.backup
+.env.production
+.editorconfig
+.phpactor.json
+.phpunit.result.cache
+.phpunit.cache
+.cursor/
+.idea/
+.vscode/
+.zed/
+.nova/
+.codex/
+
+# Node
+node_modules/
+bun.lock
+package-lock.json
+npm-debug.log
+yarn-error.log
+
+# Build output (will be built inside Docker)
+public/build/
+public/hot/
+public/storage/
+
+# Laravel dev tools
+storage/pail/
+storage/*.key
+Homestead.json
+Homestead.yaml
+
+# Test files
+tests/
+phpunit.xml
+*.test.php
+
+# Docker files
+compose.yaml
+docker-compose.yml
