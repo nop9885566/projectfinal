@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["...", "bun"]
+nixPkgs = ["php84", "php84Packages.composer", "bun", "mysql80"]
 
 [phases.install]
 cmds = ["composer install --no-dev --optimize-autoloader", "bun install"]
@@ -8,4 +8,4 @@ cmds = ["composer install --no-dev --optimize-autoloader", "bun install"]
 cmds = ["bun run build"]
 
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
