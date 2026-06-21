@@ -27,6 +27,7 @@ class OrderController extends Controller
             'items'         => 'required|array',
             'items.*.id'    => 'required|exists:products,id',
             'items.*.qty'   => 'required|integer|min:1',
+            'items.*.options'=> 'nullable|string',
             'note'          => 'nullable|string',
         ]);
 
@@ -35,12 +36,31 @@ class OrderController extends Controller
 
         foreach ($request->items as $item) {
             $product = Product::findOrFail($item['id']);
-            $subtotal = $product->price * $item['qty'];
+            
+            // คำนวณราคาต่อชิ้นโดยเริ่มจากราคาฐานใน DB
+            $itemPrice = $product->price;
+            $optionsText = $item['options'] ?? '';
+            
+            // บวกราคาเพิ่มตามออปชั่นที่เลือก
+            if ($optionsText) {
+                if (str_contains($optionsText, 'ปั่น')) $itemPrice += 10;
+                if (str_contains($optionsText, 'ไข่มุก')) $itemPrice += 10;
+                if (str_contains($optionsText, 'เจลลี่')) $itemPrice += 10;
+                if (str_contains($optionsText, 'วิปครีม')) $itemPrice += 15;
+                if (str_contains($optionsText, 'เพิ่มช็อต')) $itemPrice += 15;
+                if (str_contains($optionsText, 'เนย/แยม')) $itemPrice += 10;
+                if (str_contains($optionsText, 'ไข่ดาว')) $itemPrice += 10;
+                if (str_contains($optionsText, 'ไข่เจียว')) $itemPrice += 10;
+                if (str_contains($optionsText, 'ข้าว')) $itemPrice += 10;
+            }
+
+            $subtotal = $itemPrice * $item['qty'];
             $total += $subtotal;
             $orderItems[] = [
                 'product_id' => $product->id,
                 'quantity'   => $item['qty'],
-                'price'      => $product->price,
+                'price'      => $itemPrice,
+                'options'    => $optionsText ?: null,
             ];
         }
 

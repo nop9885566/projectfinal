@@ -19,7 +19,9 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="/dashboard">Dashboard</a></li>
       <li><a href="/dashboard/products" class="active">จัดการเมนู</a></li>
-      <li><a href="/dashboard/orders">จัดการออเดอร์</a></li>
+      @if(auth()->user()->role === 'admin')
+        <li><a href="/dashboard/orders">จัดการออเดอร์</a></li>
+      @endif
       <li><a href="/">หน้าเว็บ</a></li>
     </ul>
     <form method="POST" action="{{ route('logout') }}" style="margin:0">
@@ -72,10 +74,12 @@
               @endif
             </td>
             <td style="padding:1rem">
-              <a href="/dashboard/products/{{ $product->id }}/edit" 
-                 style="background:#3498db;color:#fff;padding:.4rem .8rem;border-radius:6px;text-decoration:none;margin-right:.5rem">
-                แก้ไข
-              </a>
+              @if(auth()->user()->role === 'admin')
+                <a href="/dashboard/products/{{ $product->id }}/edit" 
+                   style="background:#3498db;color:#fff;padding:.4rem .8rem;border-radius:6px;text-decoration:none;margin-right:.5rem">
+                  แก้ไข
+                </a>
+              @endif
               <form method="POST" action="/dashboard/products/{{ $product->id }}" style="display:inline">
                 @csrf
                 @method('DELETE')

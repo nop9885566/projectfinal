@@ -64,9 +64,14 @@
       {{-- รายการสินค้า --}}
       <div style="margin-top:1rem;border-top:1px solid #eee;padding-top:1rem">
         @foreach($order->orderItems as $item)
-          <div style="display:flex;justify-content:space-between;padding:.3rem 0">
-            <span>{{ $item->product->name }} x{{ $item->quantity }}</span>
-            <span>฿{{ number_format($item->price * $item->quantity, 2) }}</span>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:.4rem 0;border-bottom:1px dashed #f5f5f5">
+            <div>
+              <span style="font-weight:600">{{ $item->product->name }} x{{ $item->quantity }}</span>
+              @if($item->options)
+                <div style="font-size:0.8rem;color:#7d8f69;margin-top:2px">✨ ตัวเลือก: {{ $item->options }}</div>
+              @endif
+            </div>
+            <strong style="color:var(--text-light)">฿{{ number_format($item->price * $item->quantity, 2) }}</strong>
           </div>
         @endforeach
         @if($order->note)

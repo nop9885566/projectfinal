@@ -42,11 +42,18 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        if (auth()->user()->role === 'staff') {
+            abort(403, 'พนักงานสามารถเพิ่มและลบเมนูได้เท่านั้น ไม่สามารถแก้ไขเมนูได้');
+        }
         return view('dashboard.products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
+        if (auth()->user()->role === 'staff') {
+            abort(403, 'พนักงานสามารถเพิ่มและลบเมนูได้เท่านั้น ไม่สามารถแก้ไขเมนูได้');
+        }
+
         $request->validate([
             'name'        => 'required|string|max:255',
             'category'    => 'required|in:coffee,noncoffee,bakery,food',

@@ -19,7 +19,9 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="/dashboard">Dashboard</a></li>
       <li><a href="/dashboard/products">จัดการเมนู</a></li>
-      <li><a href="/dashboard/orders">จัดการออเดอร์</a></li>
+      @if(auth()->user()->role === 'admin')
+        <li><a href="/dashboard/orders">จัดการออเดอร์</a></li>
+      @endif
       <li><a href="/">หน้าเว็บ</a></li>
     </ul>
     <form method="POST" action="{{ route('logout') }}" style="margin:0">
@@ -67,9 +69,11 @@
       <a href="/dashboard/products/create" class="btn btn-primary" style="text-align:center">
         <i class="fa-solid fa-plus"></i> เพิ่มเมนูใหม่
       </a>
+      @if(auth()->user()->role === 'admin')
       <a href="/dashboard/orders" class="btn btn-glass" style="text-align:center">
         <i class="fa-solid fa-list"></i> ดูออเดอร์ทั้งหมด
       </a>
+      @endif
     </div>
 
   </div>

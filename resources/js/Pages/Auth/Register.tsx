@@ -28,7 +28,7 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="ชื่อผู้ใช้งาน (Name)" className="text-cafe-brown-dark font-medium" />
 
                     <TextInput
                         id="name"
@@ -45,7 +45,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="อีเมล (Email)" className="text-cafe-brown-dark font-medium" />
 
                     <TextInput
                         id="email"
@@ -62,7 +62,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="รหัสผ่าน (Password)" className="text-cafe-brown-dark font-medium" />
 
                     <TextInput
                         id="password"
@@ -81,7 +81,8 @@ export default function Register() {
                 <div className="mt-4">
                     <InputLabel
                         htmlFor="password_confirmation"
-                        value="Confirm Password"
+                        value="ยืนยันรหัสผ่าน (Confirm Password)"
+                        className="text-cafe-brown-dark font-medium"
                     />
 
                     <TextInput
@@ -103,16 +104,16 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div className="mt-6 flex items-center justify-between">
                     <Link
                         href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="rounded-md text-sm text-cafe-green hover:text-cafe-green-dark underline focus:outline-none"
                     >
-                        Already registered?
+                        มีบัญชีอยู่แล้ว? เข้าสู่ระบบ
                     </Link>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                    <PrimaryButton disabled={processing}>
+                        สมัครสมาชิก
                     </PrimaryButton>
                 </div>
             </form>

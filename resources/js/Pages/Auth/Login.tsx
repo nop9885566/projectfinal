@@ -40,7 +40,7 @@ export default function Login({
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="อีเมล (Email)" className="text-cafe-brown-dark font-medium" />
 
                     <TextInput
                         id="email"
@@ -57,7 +57,7 @@ export default function Login({
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="รหัสผ่าน (Password)" className="text-cafe-brown-dark font-medium" />
 
                     <TextInput
                         id="password"
@@ -73,10 +73,11 @@ export default function Login({
                 </div>
 
                 <div className="mt-4 block">
-                    <label className="flex items-center">
+                    <label className="flex items-center cursor-pointer">
                         <Checkbox
                             name="remember"
                             checked={data.remember}
+                            className="rounded border-gray-300 text-cafe-green focus:ring-cafe-green"
                             onChange={(e) =>
                                 setData(
                                     'remember',
@@ -84,25 +85,37 @@ export default function Login({
                                 )
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
+                        <span className="ms-2 text-sm text-cafe-brown-dark/80">
+                            จดจำการเข้าระบบของฉัน
                         </span>
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
+                <div className="mt-6 flex items-center justify-between">
+                    {canResetPassword ? (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="rounded-md text-sm text-cafe-green hover:text-cafe-green-dark underline focus:outline-none"
                         >
-                            Forgot your password?
+                            ลืมรหัสผ่าน?
                         </Link>
+                    ) : (
+                        <div />
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                    <PrimaryButton disabled={processing}>
+                        เข้าสู่ระบบ
                     </PrimaryButton>
+                </div>
+
+                <div className="mt-8 border-t border-cafe-beige/40 pt-4 text-center text-sm text-cafe-brown-dark/70">
+                    ยังไม่มีบัญชีสมาชิก?{' '}
+                    <Link
+                        href={route('register')}
+                        className="text-cafe-green hover:text-cafe-green-dark underline font-semibold"
+                    >
+                        สมัครสมาชิกใหม่ที่นี่
+                    </Link>
                 </div>
             </form>
         </GuestLayout>

@@ -13,7 +13,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/menu', function () {
-    return view('menu');
+    $products = \App\Models\Product::where('is_available', true)->get();
+    return view('menu', compact('products'));
 })->name('menu');
 
 Route::get('/gallery', function () {
@@ -26,10 +27,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 
-// พนักงาน + Admin เท่านั้น
+// พนักงาน + Admin (แดชบอร์ดและการจัดการเมนู)
 Route::middleware(['auth', 'role:staff,admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/dashboard/products', ProductController::class);
+});
+
+// Admin เท่านั้น (จัดการออเดอร์หลังบ้าน)
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/orders', [OrderController::class, 'manage'])->name('orders.manage');
     Route::patch('/dashboard/orders/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
