@@ -1,7 +1,7 @@
 <div class="menu-card" data-reveal>
-  <div class="menu-card-img" style="display:flex; align-items:center; justify-content:center; height:180px; overflow:hidden; background:var(--cream); border-bottom:1px solid var(--beige)">
+  <div class="menu-card-img" style="background:var(--cream); border-bottom:1px solid var(--beige)">
     @if($product->image)
-      <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width:100%; height:100%; object-fit:cover;">
+      <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width:100%; height:100%; object-fit:contain; padding:10px;">
     @else
       @php
         $emoji = '☕';

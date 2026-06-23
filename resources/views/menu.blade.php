@@ -53,7 +53,8 @@
     .modal-product-img-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 10px;
     }
     .modal-body {
       padding: 1.5rem;
