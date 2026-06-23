@@ -17,14 +17,17 @@
     <p>{{ $product->description }}</p>
     <div class="menu-footer">
       <span class="price">฿{{ number_format($product->price, 0) }}</span>
+      @php
+        $itemData = [
+            "id" => $product->id,
+            "name" => $product->name,
+            "price" => (float)$product->price,
+            "category" => $product->category,
+            "image" => $product->image ? asset("storage/" . $product->image) : null
+        ];
+      @endphp
       <button class="btn-add" 
-              onclick='openOrderModal(@json([
-                  "id" => $product->id,
-                  "name" => $product->name,
-                  "price" => (float)$product->price,
-                  "category" => $product->category,
-                  "image" => $product->image ? asset("storage/" . $product->image) : null
-              ]))' 
+              onclick='openOrderModal(@json($itemData))' 
               aria-label="เพิ่มลงตะกร้า">+</button>
     </div>
   </div>
