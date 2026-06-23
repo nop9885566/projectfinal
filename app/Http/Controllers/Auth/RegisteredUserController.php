@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('menu', absolute: false));
+        return Inertia::location(route('menu', absolute: false));
     }
 }

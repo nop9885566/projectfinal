@@ -34,10 +34,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if (in_array($request->user()->role, ['admin', 'staff'])) {
-            return redirect(route('dashboard', absolute: false));
+            return Inertia::location(route('dashboard', absolute: false));
         }
 
-        return redirect(route('menu', absolute: false));
+        return Inertia::location(route('menu', absolute: false));
     }
 
     /**
