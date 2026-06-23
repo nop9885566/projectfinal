@@ -30,6 +30,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
+        $data['is_available'] = $request->has('is_available');
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
@@ -64,6 +65,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
+        $data['is_available'] = $request->has('is_available');
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
