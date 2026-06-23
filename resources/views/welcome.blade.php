@@ -50,7 +50,7 @@
     <div class="hero-badge">🌿 เปิดทุกวัน 09:00 – 17:00 น. หยุดวันเสาร์</div>
     <h1>
       <span class="hero-title-th">บรรจงคาเฟ่</span>
-      <span class="hero-title-en">BARJONG CAFE</span>
+      <span class="hero-title-en">BANJONG CAFE</span>
     </h1>
     <p class="hero-sub">กาแฟดี · บรรยากาศธรรมชาติ · พื้นที่แห่งการพักผ่อน</p>
     <div class="hero-btns">
