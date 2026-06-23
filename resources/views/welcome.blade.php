@@ -17,7 +17,7 @@
 <div id="loader">
   <div>
     <div class="loader-logo">B</div>
-    <div class="loader-text">Banjong Cafe</div>
+    <div class="loader-text">Banchong Cafe</div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
   </div>
 </div>
@@ -44,13 +44,13 @@
 
 {{-- ===== HERO ===== --}}
 <section id="home">
-  <div class="hero-bg" style="background-image: url('{{ asset('images/hero-bg.jpg') }}'); background-size:cover; background-position:center"></div>
+  <div class="hero-bg" style="background-image: url('{{ asset('images/welcom1.jpg') }}'); background-size:cover; background-position:center"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-badge">🌿 เปิดทุกวัน 09:00 – 17:00 น. หยุดวันเสาร์</div>
     <h1>
       <span class="hero-title-th">บรรจงคาเฟ่</span>
-      <span class="hero-title-en">BANJONG CAFE</span>
+      <span class="hero-title-en">BANCHONG CAFE</span>
     </h1>
     <p class="hero-sub">กาแฟดี · บรรยากาศธรรมชาติ · พื้นที่แห่งการพักผ่อน</p>
     <div class="hero-btns">
