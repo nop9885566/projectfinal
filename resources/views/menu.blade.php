@@ -301,8 +301,7 @@
     <div class="menu-tabs" data-reveal>
       <button class="tab-btn active" onclick="switchTab('coffee', this)">☕ Coffee</button>
       <button class="tab-btn" onclick="switchTab('noncoffee', this)">🧋 Non-Coffee</button>
-      <button class="tab-btn" onclick="switchTab('bakery', this)">🥐 Bakery</button>
-      <button class="tab-btn" onclick="switchTab('food', this)">🍽️ Food</button>
+      <button class="tab-btn" onclick="switchTab('bakery', this)">🍰 Cake</button>
     </div>
 
     {{-- Coffee --}}
@@ -323,21 +322,12 @@
       @endforelse
     </div>
 
-    {{-- Bakery --}}
+    {{-- Cake --}}
     <div class="menu-grid" id="tab-bakery">
       @forelse($products->where('category', 'bakery') as $product)
         @include('partials.menu-card', compact('product'))
       @empty
-        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเบเกอรี่ในขณะนี้</div>
-      @endforelse
-    </div>
-
-    {{-- Food --}}
-    <div class="menu-grid" id="tab-food">
-      @forelse($products->where('category', 'food') as $product)
-        @include('partials.menu-card', compact('product'))
-      @empty
-        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูอาหารในขณะนี้</div>
+        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเค้กในขณะนี้</div>
       @endforelse
     </div>
   </div>
@@ -480,8 +470,7 @@ function openOrderModal(product) {
   } else {
     let emoji = '☕';
     if (product.category === 'noncoffee') emoji = '🧋';
-    else if (product.category === 'bakery') emoji = '🥐';
-    else if (product.category === 'food') emoji = '🍽️';
+    else if (product.category === 'bakery') emoji = '🍰';
     imgBox.innerHTML = `<span style="font-size:4rem">${emoji}</span>`;
   }
   
@@ -556,35 +545,6 @@ function openOrderModal(product) {
         </div>
       </div>
     `;
-  } else if (product.category === 'food') {
-    optionsContainer.innerHTML = `
-      <div class="option-group">
-        <h4>ระดับความเผ็ด</h4>
-        <div class="option-items">
-          <input type="radio" id="spicy-normal" name="food-spicy" value="เผ็ดปกติ" class="option-input" checked>
-          <label for="spicy-normal" class="option-label">เผ็ดปกติ</label>
-          
-          <input type="radio" id="spicy-mild" name="food-spicy" value="เผ็ดน้อย" class="option-input">
-          <label for="spicy-mild" class="option-label">เผ็ดน้อย</label>
-          
-          <input type="radio" id="spicy-none" name="food-spicy" value="ไม่เผ็ด" class="option-input">
-          <label for="spicy-none" class="option-label">ไม่เผ็ด</label>
-        </div>
-      </div>
-      <div class="option-group">
-        <h4>ท็อปปิ้งเพิ่มเติม</h4>
-        <div class="option-items">
-          <input type="checkbox" id="addon-egg" value="ไข่ดาว (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-egg" class="option-label">+ ไข่ดาว (+฿10)</label>
-          
-          <input type="checkbox" id="addon-egg2" value="ไข่เจียว (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-egg2" class="option-label">+ ไข่เจียว (+฿10)</label>
-          
-          <input type="checkbox" id="addon-rice" value="ข้าวสวย (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-rice" class="option-label">+ เพิ่มข้าว (+฿10)</label>
-        </div>
-      </div>
-    `;
   }
   
   document.getElementById('modal-qty').innerText = currentQty;
@@ -610,10 +570,6 @@ function calculateModalPrice() {
   } else if (currentProduct.category === 'bakery') {
     if (document.getElementById('addon-whip-bakery') && document.getElementById('addon-whip-bakery').checked) extra += 15;
     if (document.getElementById('addon-jam') && document.getElementById('addon-jam').checked) extra += 10;
-  } else if (currentProduct.category === 'food') {
-    if (document.getElementById('addon-egg') && document.getElementById('addon-egg').checked) extra += 10;
-    if (document.getElementById('addon-egg2') && document.getElementById('addon-egg2').checked) extra += 10;
-    if (document.getElementById('addon-rice') && document.getElementById('addon-rice').checked) extra += 10;
   }
   
   const unitPrice = base + extra;
@@ -651,14 +607,6 @@ function addModalItemToCart() {
     if (serveRadio) options.push(serveRadio.value);
     
     ['addon-whip-bakery', 'addon-jam'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && el.checked) options.push(el.value);
-    });
-  } else if (currentProduct.category === 'food') {
-    const spicyRadio = document.querySelector('input[name="food-spicy"]:checked');
-    if (spicyRadio) options.push(spicyRadio.value);
-    
-    ['addon-egg', 'addon-egg2', 'addon-rice'].forEach(id => {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });
@@ -741,9 +689,6 @@ function updateCartUI() {
         if (item.options.includes('วิปครีม')) extra += 15;
         if (item.options.includes('เพิ่มช็อต')) extra += 15;
         if (item.options.includes('เนย/แยม')) extra += 10;
-        if (item.options.includes('ไข่ดาว')) extra += 10;
-        if (item.options.includes('ไข่เจียว')) extra += 10;
-        if (item.options.includes('ข้าว')) extra += 10;
       }
       
       const priceSum = (base + extra) * item.qty;
