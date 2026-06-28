@@ -257,37 +257,7 @@
 </head>
 <body>
 
-{{-- NAVBAR --}}
-<nav id="navbar" class="scrolled">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/">หน้าแรก</a></li>
-      <li><a href="/menu" class="active">เมนู</a></li>
-      @auth
-        <li><a href="/orders">ออเดอร์ของฉัน</a></li>
-        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
-          <li><a href="/dashboard">Dashboard</a></li>
-        @endif
-      @endauth
-    </ul>
-    <div style="display:flex; align-items:center; gap:8px">
-      @auth
-        <form method="POST" action="{{ route('logout') }}" style="margin:0">
-          @csrf
-          <button type="submit" class="btn-nav" style="background:var(--brown); border:none; cursor:pointer">ออกจากระบบ</button>
-        </form>
-      @else
-        <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
-      @endauth
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+@include('components.navbar')
 
 {{-- MENU --}}
 <section id="menu" class="section" style="padding-top:120px; background:var(--cream); min-height:100vh">
@@ -436,13 +406,6 @@ function switchTab(id, btn) {
   requestAnimationFrame(() => { grid.style.transition = 'opacity .4s ease'; grid.style.opacity = '1'; });
 }
 
-// Hamburger
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open');
-});
 
 // JavaScript Cart & Modal System
 let currentProduct = null;

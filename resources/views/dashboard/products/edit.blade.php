@@ -11,26 +11,7 @@
 </head>
 <body>
 
-<nav id="navbar" class="scrolled">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/dashboard/products" class="active">จัดการเมนู</a></li>
-      <li><a href="/dashboard/orders">จัดการออเดอร์</a></li>
-      <li><a href="/">หน้าเว็บ</a></li>
-    </ul>
-    <form method="POST" action="{{ route('logout') }}" style="margin:0">
-      @csrf
-      <button type="submit" class="btn-nav">ออกจากระบบ</button>
-    </form>
-    <button class="hamburger" id="hamburger" aria-label="toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+@include('components.navbar')
 
 <div style="padding: 120px 2rem 2rem">
   <div class="container" style="max-width:600px">
@@ -113,15 +94,6 @@
   </div>
 </div>
 
-<script>
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      navLinks.classList.toggle('open');
-    });
-  }
-</script>
+
 </body>
 </html>

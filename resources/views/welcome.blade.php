@@ -23,24 +23,7 @@
 </div>
 
 {{-- ===== NAVBAR ===== --}}
-<nav id="navbar">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="active">หน้าแรก</a></li>
-      <li><a href="#about">เกี่ยวกับเรา</a></li>
-      <li><a href="/menu">เมนู</a></li>
-      <li><a href="#contact">ติดต่อ</a></li>
-    </ul>
-    <a href="/menu" class="btn-nav" style="margin-right:4px">สั่งซื้อ</a>
-    <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
-    <button class="hamburger" id="hamburger" aria-label="toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+@include('components.navbar')
 
 {{-- ===== HERO ===== --}}
 <section id="home">
@@ -218,31 +201,15 @@
 /* ── Loader ── */
 window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2000));
 
-/* ── Navbar scroll ── */
-const navbar = document.getElementById('navbar');
+/* ── Scroll Spy & Back to Top ── */
 const allLinks = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
   document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 500);
   document.querySelectorAll('section[id]').forEach(sec => {
     if (window.scrollY >= sec.offsetTop - 130)
       allLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + sec.id));
   });
 }, { passive:true });
-
-/* ── Hamburger ── */
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open');
-  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
-});
-navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  hamburger.classList.remove('open');
-  navLinks.classList.remove('open');
-  document.body.style.overflow = '';
-}));
 
 /* ── Smooth Scroll ── */
 function smoothScroll(id) {

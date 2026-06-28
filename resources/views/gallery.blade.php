@@ -12,21 +12,7 @@
 <body>
 
 {{-- NAVBAR --}}
-<nav id="navbar" class="scrolled">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/">หน้าแรก</a></li>
-      <li><a href="/menu">เมนู</a></li>
-      <li><a href="/gallery" class="active">แกลเลอรี</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+@include('components.navbar')
 
 {{-- GALLERY --}}
 <section id="gallery" class="section" style="padding-top:120px">
@@ -69,12 +55,7 @@
 </footer>
 
 <script>
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open');
-});
+
 
 const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
