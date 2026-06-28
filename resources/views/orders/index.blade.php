@@ -24,8 +24,11 @@
     </ul>
     <form method="POST" action="{{ route('logout') }}" style="margin:0">
       @csrf
-      <button type="submit" class="btn-nav">ออกจากระบบ</button>
+      <button type="submit" class="btn-nav" style="background:var(--brown); border:none; cursor:pointer">ออกจากระบบ</button>
     </form>
+    <button class="hamburger" id="hamburger" aria-label="toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -90,5 +93,15 @@
   </div>
 </div>
 
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+  }
+</script>
 </body>
 </html>
