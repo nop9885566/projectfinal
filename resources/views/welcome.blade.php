@@ -34,7 +34,7 @@
       <li><a href="/menu">เมนู</a></li>
       <li><a href="#contact">ติดต่อ</a></li>
     </ul>
-    <a href="/register" class="btn-nav" style="margin-right:4px">สมัครสมาชิก</a>
+    <a href="/menu" class="btn-nav" style="margin-right:4px">สั่งซื้อ</a>
     <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>

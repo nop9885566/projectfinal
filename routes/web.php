@@ -24,8 +24,10 @@ Route::get('/gallery', function () {
 // ลูกค้า Login แล้วใช้ได้
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
+
+// ลูกค้าทั่วไป (ไม่ต้อง Login) ก็สั่งซื้อได้
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // พนักงาน + Admin (แดชบอร์ดและการจัดการเมนู)
 Route::middleware(['auth', 'role:staff,admin'])->group(function () {

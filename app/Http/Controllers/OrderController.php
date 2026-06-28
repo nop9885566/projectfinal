@@ -73,7 +73,11 @@ class OrderController extends Controller
 
         $order->orderItems()->createMany($orderItems);
 
-        return redirect()->route('orders.index')->with('success', 'สั่งซื้อสำเร็จ');
+        if (auth()->check()) {
+            return redirect()->route('orders.index')->with('success', 'สั่งซื้อสำเร็จ');
+        } else {
+            return redirect()->route('menu')->with('success', 'สั่งซื้อสำเร็จ');
+        }
     }
 
     // พนักงาน/Admin ดูออเดอร์ทั้งหมด
