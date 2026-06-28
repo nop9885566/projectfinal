@@ -26,6 +26,9 @@
       <?php echo csrf_field(); ?>
       <button type="submit" class="btn-nav">ออกจากระบบ</button>
     </form>
+    <button class="hamburger" id="hamburger" aria-label="toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -125,5 +128,15 @@
   </div>
 </div>
 
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+  }
+</script>
 </body>
 </html><?php /**PATH /var/www/html/resources/views/dashboard/orders/index.blade.php ENDPATH**/ ?>
