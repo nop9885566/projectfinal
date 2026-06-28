@@ -487,6 +487,7 @@ footer ul a:hover { color: var(--green-light); padding-left: 4px; }
   .footer-grid { grid-template-columns:1fr 1fr; gap:28px; }
 }
 @media(max-width:768px){
+  .hide-on-mobile { display: none !important; }
   .section { padding:72px 0; }
   .nav-links,.btn-nav { display:none; }
   .hamburger { display:flex; }

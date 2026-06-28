@@ -80,25 +80,25 @@
         </div>
 
         
-        <div style="display:flex; gap:.5rem;">
-          <form method="POST" action="<?php echo e(route('orders.updateStatus', $order->id)); ?>" style="display:flex;gap:.5rem">
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-top:1rem; width:100%;">
+          <form method="POST" action="<?php echo e(route('orders.updateStatus', $order->id)); ?>" style="display:flex; gap:.5rem; flex-wrap:wrap; flex:1;">
             <?php echo csrf_field(); ?>
             <?php echo method_field('PATCH'); ?>
             <select name="status"
-                    style="padding:.5rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
+                    style="padding:.5rem;border:1px solid #ddd;border-radius:8px;font-family:inherit; flex:1; min-width:120px;">
               <option value="pending"    <?php echo e($order->status=='pending'    ? 'selected' : ''); ?>>⏳ รอดำเนินการ</option>
               <option value="confirmed"  <?php echo e($order->status=='confirmed'  ? 'selected' : ''); ?>>✅ ยืนยันแล้ว</option>
               <option value="preparing"  <?php echo e($order->status=='preparing'  ? 'selected' : ''); ?>>👨‍🍳 กำลังเตรียม</option>
               <option value="completed"  <?php echo e($order->status=='completed'  ? 'selected' : ''); ?>>🎉 เสร็จแล้ว</option>
               <option value="cancelled"  <?php echo e($order->status=='cancelled'  ? 'selected' : ''); ?>>❌ ยกเลิก</option>
             </select>
-            <button type="submit" class="btn btn-primary" style="padding:.5rem 1rem">อัปเดต</button>
+            <button type="submit" class="btn btn-primary" style="padding:.5rem 1rem; white-space:nowrap;">อัปเดต</button>
           </form>
 
           <form method="POST" action="<?php echo e(route('orders.destroy', $order->id)); ?>" onsubmit="return confirm('ยืนยันการลบออเดอร์นี้? ข้อมูลจะถูกลบถาวร');">
             <?php echo csrf_field(); ?>
             <?php echo method_field('DELETE'); ?>
-            <button type="submit" style="background:#dc3545; color:white; padding:.5rem 1rem; border:none; border-radius:8px; cursor:pointer;" title="ลบออเดอร์"><i class="fa-solid fa-trash"></i></button>
+            <button type="submit" style="background:#dc3545; color:white; padding:.5rem 1rem; border:none; border-radius:8px; cursor:pointer; height:100%;" title="ลบออเดอร์"><i class="fa-solid fa-trash"></i></button>
           </form>
         </div>
       </div>
