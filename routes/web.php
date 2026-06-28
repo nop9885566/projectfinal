@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
 
 // ลูกค้าทั่วไป (ไม่ต้อง Login) ก็สั่งซื้อได้
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])->name('orders.payment');
+Route::post('/orders/{order}/payment', [OrderController::class, 'uploadSlip'])->name('orders.uploadSlip');
 
 // พนักงาน + Admin (แดชบอร์ดและการจัดการเมนู)
 Route::middleware(['auth', 'role:staff,admin'])->group(function () {

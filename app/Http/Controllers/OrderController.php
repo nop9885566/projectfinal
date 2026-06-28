@@ -77,10 +77,37 @@ class OrderController extends Controller
 
         $order->orderItems()->createMany($orderItems);
 
+        // Redirect to payment page
+        return redirect()->route('orders.payment', $order->id)->with('success', 'สั่งซื้อสำเร็จ กรุณาชำระเงิน');
+    }
+
+    // หน้าชำระเงินและอัปโหลดสลิป
+    public function payment(Order $order)
+    {
+        return view('orders.payment', compact('order'));
+    }
+
+    public function uploadSlip(Request $request, Order $order)
+    {
+        $request->validate([
+            'slip_image' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ], [
+            'slip_image.required' => 'กรุณาอัปโหลดสลิปโอนเงิน',
+            'slip_image.image' => 'ไฟล์ต้องเป็นรูปภาพเท่านั้น',
+        ]);
+
+        if ($request->hasFile('slip_image')) {
+            $path = $request->file('slip_image')->store('slips', 'public');
+            $order->update([
+                'slip_image' => $path,
+                'payment_status' => 'paid',
+            ]);
+        }
+
         if (auth()->check()) {
-            return redirect()->route('orders.index')->with('success', 'สั่งซื้อสำเร็จ');
+            return redirect()->route('orders.index')->with('success', 'อัปโหลดสลิปสำเร็จ รอการตรวจสอบจากร้าน');
         } else {
-            return redirect()->route('menu')->with('success', 'สั่งซื้อสำเร็จ');
+            return redirect()->route('menu')->with('success', 'ส่งคำสั่งซื้อและสลิปสำเร็จ! เรากำลังดำเนินการให้ครับ');
         }
     }
 

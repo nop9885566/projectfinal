@@ -16,6 +16,8 @@ return new class extends Migration
         $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
         $table->string('customer_name')->nullable();
         $table->string('customer_phone')->nullable();
+        $table->enum('payment_status', ['pending', 'paid', 'verified', 'failed'])->default('pending');
+        $table->string('slip_image')->nullable();
         $table->enum('status', ['pending', 'confirmed', 'preparing', 'completed', 'cancelled'])->default('pending');
         $table->decimal('total_price', 8, 2);
         $table->text('note')->nullable();

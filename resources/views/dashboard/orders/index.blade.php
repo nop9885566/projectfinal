@@ -56,7 +56,23 @@
           @endif
         </div>
         <div>
-          <strong style="color:#7D8F69">฿{{ number_format($order->total_price, 2) }}</strong>
+          <strong style="color:#7D8F69; font-size: 1.1rem;">฿{{ number_format($order->total_price, 2) }}</strong>
+          <div style="margin-top: 5px; font-size: 0.85rem;">
+            @if($order->payment_status === 'pending')
+              <span style="background: #fdf0d5; color: #b87c00; padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-clock"></i> รอชำระเงิน</span>
+            @elseif($order->payment_status === 'paid')
+              <span style="background: #e3f2fd; color: #0d47a1; padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-file-invoice-dollar"></i> โอนแล้ว</span>
+            @elseif($order->payment_status === 'verified')
+              <span style="background: #e8f5e9; color: #1b5e20; padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-check-double"></i> ตรวจสอบแล้ว</span>
+            @else
+              <span style="background: #ffebee; color: #b71c1c; padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-triangle-exclamation"></i> ไม่สำเร็จ</span>
+            @endif
+          </div>
+          @if($order->slip_image)
+            <div style="margin-top: 6px;">
+              <a href="{{ asset('storage/' . $order->slip_image) }}" target="_blank" style="font-size: 0.85rem; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--green);"><i class="fa-solid fa-image"></i> ดูหลักฐานโอนเงิน</a>
+            </div>
+          @endif
         </div>
 
         {{-- อัปเดตสถานะ --}}
