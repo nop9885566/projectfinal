@@ -395,14 +395,7 @@
         <textarea id="cart-note" rows="2" style="width:100%; border:1px solid var(--beige); border-radius:8px; padding:.5rem; font-family:inherit; font-size:.85rem; outline:none; resize:none" placeholder="เช่น หวานน้อยพิเศษ, แยกน้ำแข็ง..."></textarea>
       </div>
       
-      <?php if(auth()->guard()->check()): ?>
-        <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:1.2rem" onclick="submitOrder()">ยืนยันการสั่งซื้อ</button>
-      <?php else: ?>
-        <div style="background:var(--cream); padding:1rem; border-radius:12px; margin-top:1.2rem; text-align:center; font-size:.85rem; border:1px solid var(--beige)">
-          <p style="color:var(--text-light); margin-bottom:.5rem">กรุณาเข้าสู่ระบบเพื่อสั่งซื้ออาหารและเครื่องดื่ม</p>
-          <a href="/login" class="btn-nav" style="display:inline-block">เข้าสู่ระบบ</a>
-        </div>
-      <?php endif; ?>
+      <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:1.2rem" onclick="submitOrder()">ยืนยันการสั่งซื้อ</button>
     </div>
   </div>
 </div>

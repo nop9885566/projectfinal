@@ -394,6 +394,14 @@
         <label for="cart-note" style="display:block; font-size:.8rem; color:var(--text-light); margin-bottom:.3rem">หมายเหตุถึงทางร้าน:</label>
         <textarea id="cart-note" rows="2" style="width:100%; border:1px solid var(--beige); border-radius:8px; padding:.5rem; font-family:inherit; font-size:.85rem; outline:none; resize:none" placeholder="เช่น หวานน้อยพิเศษ, แยกน้ำแข็ง..."></textarea>
       </div>
+
+      @guest
+      <div style="margin-top:1rem; padding:1rem; border:1px solid var(--beige); border-radius:8px; background:#fdfdfb;">
+        <p style="font-size:0.85rem; font-weight:600; color:var(--brown-dark); margin-bottom:0.5rem;"><i class="fa-solid fa-user"></i> ข้อมูลติดต่อ (ลูกค้าทั่วไป)</p>
+        <input type="text" id="customer-name" placeholder="ชื่อของคุณ *" style="width:100%; border:1px solid var(--beige); border-radius:6px; padding:0.6rem; margin-bottom:0.6rem; font-family:inherit; font-size:0.85rem; outline:none;" required>
+        <input type="text" id="customer-phone" placeholder="เบอร์โทรศัพท์ *" style="width:100%; border:1px solid var(--beige); border-radius:6px; padding:0.6rem; font-family:inherit; font-size:0.85rem; outline:none;" required>
+      </div>
+      @endguest
       
       <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:1.2rem" onclick="submitOrder()">ยืนยันการสั่งซื้อ</button>
     </div>
@@ -730,6 +738,17 @@ function removeFromCart(index) {
 function submitOrder() {
   if (cart.length === 0) return;
   
+  // Validate guest info
+  const customerNameEl = document.getElementById('customer-name');
+  const customerPhoneEl = document.getElementById('customer-phone');
+  
+  if (customerNameEl && customerPhoneEl) {
+    if (!customerNameEl.value.trim() || !customerPhoneEl.value.trim()) {
+      alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วนก่อนยืนยันการสั่งซื้อครับ');
+      return;
+    }
+  }
+  
   const form = document.getElementById('order-form');
   // Clear any dynamic inputs from previous attempts
   form.querySelectorAll('.dynamic-input').forEach(e => e.remove());
@@ -767,6 +786,22 @@ function submitOrder() {
   noteInput.value = document.getElementById('cart-note').value;
   noteInput.className = 'dynamic-input';
   form.appendChild(noteInput);
+  
+  if (customerNameEl && customerPhoneEl) {
+    const nameInput = document.createElement('input');
+    nameInput.type = 'hidden';
+    nameInput.name = 'customer_name';
+    nameInput.value = customerNameEl.value.trim();
+    nameInput.className = 'dynamic-input';
+    form.appendChild(nameInput);
+    
+    const phoneInput = document.createElement('input');
+    phoneInput.type = 'hidden';
+    phoneInput.name = 'customer_phone';
+    phoneInput.value = customerPhoneEl.value.trim();
+    phoneInput.className = 'dynamic-input';
+    form.appendChild(phoneInput);
+  }
   
   // Clear localStorage cart
   localStorage.removeItem('cafe_cart');

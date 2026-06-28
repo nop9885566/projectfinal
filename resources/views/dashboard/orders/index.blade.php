@@ -48,7 +48,12 @@
           <span style="margin-left:1rem;color:#999;font-size:.9rem">{{ $order->created_at->format('d/m/Y H:i') }}</span>
         </div>
         <div>
-          <strong>{{ $order->user->name }}</strong>
+          @if($order->user)
+            <strong><i class="fa-solid fa-user-check" style="color:#7D8F69"></i> {{ $order->user->name }}</strong>
+          @else
+            <strong><i class="fa-solid fa-user" style="color:#999"></i> {{ $order->customer_name }}</strong> (ลูกค้าทั่วไป)<br>
+            <small style="color:#666"><i class="fa-solid fa-phone"></i> {{ $order->customer_phone }}</small>
+          @endif
         </div>
         <div>
           <strong style="color:#7D8F69">฿{{ number_format($order->total_price, 2) }}</strong>

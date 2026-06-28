@@ -27,8 +27,10 @@ class OrderController extends Controller
             'items'         => 'required|array',
             'items.*.id'    => 'required|exists:products,id',
             'items.*.qty'   => 'required|integer|min:1',
-            'items.*.options'=> 'nullable|string',
-            'note'          => 'nullable|string',
+            'items.*.options'  => 'nullable|string',
+            'note'             => 'nullable|string',
+            'customer_name'    => auth()->check() ? 'nullable|string' : 'required|string|max:255',
+            'customer_phone'   => auth()->check() ? 'nullable|string' : 'required|string|max:20',
         ]);
 
         $total = 0;
@@ -65,10 +67,12 @@ class OrderController extends Controller
         }
 
         $order = Order::create([
-            'user_id'     => auth()->id(),
-            'status'      => 'pending',
-            'total_price' => $total,
-            'note'        => $request->note,
+            'user_id'        => auth()->id(),
+            'customer_name'  => $request->customer_name,
+            'customer_phone' => $request->customer_phone,
+            'status'         => 'pending',
+            'total_price'    => $total,
+            'note'           => $request->note,
         ]);
 
         $order->orderItems()->createMany($orderItems);

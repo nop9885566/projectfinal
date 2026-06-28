@@ -14,6 +14,8 @@ return new class extends Migration
     Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+        $table->string('customer_name')->nullable();
+        $table->string('customer_phone')->nullable();
         $table->enum('status', ['pending', 'confirmed', 'preparing', 'completed', 'cancelled'])->default('pending');
         $table->decimal('total_price', 8, 2);
         $table->text('note')->nullable();
