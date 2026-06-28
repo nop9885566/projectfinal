@@ -4,28 +4,36 @@
       <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">หน้าแรก</a></li>
-      @if(request()->is('/'))
-        <li><a href="#about">เกี่ยวกับเรา</a></li>
-      @endif
-      <li><a href="/menu" class="{{ request()->is('menu') ? 'active' : '' }}">เมนู</a></li>
-      @if(!request()->is('/'))
-        <li><a href="/gallery" class="{{ request()->is('gallery') ? 'active' : '' }}">แกลเลอรี</a></li>
-      @endif
-      @if(request()->is('/'))
-        <li><a href="#contact">ติดต่อ</a></li>
-      @endif
-      
-      @auth
-        <li><a href="/orders" class="{{ request()->is('orders') ? 'active' : '' }}">ออเดอร์ของฉัน</a></li>
-        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
-          <li><a href="/dashboard" class="{{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a></li>
-          <li><a href="/dashboard/products" class="{{ request()->is('dashboard/products*') ? 'active' : '' }}">จัดการเมนู</a></li>
-          @if(auth()->user()->role === 'admin')
-            <li><a href="/dashboard/orders" class="{{ request()->is('dashboard/orders*') ? 'active' : '' }}">จัดการออเดอร์</a></li>
-          @endif
+      @if(!request()->is('dashboard*'))
+        {{-- Frontend Links --}}
+        <li><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">หน้าแรก</a></li>
+        @if(request()->is('/'))
+          <li><a href="#about">เกี่ยวกับเรา</a></li>
         @endif
-      @endauth
+        <li><a href="/menu" class="{{ request()->is('menu') ? 'active' : '' }}">เมนู</a></li>
+        @if(!request()->is('/'))
+          <li><a href="/gallery" class="{{ request()->is('gallery') ? 'active' : '' }}">แกลเลอรี</a></li>
+        @endif
+        @if(request()->is('/'))
+          <li><a href="#contact">ติดต่อ</a></li>
+        @endif
+        @auth
+          <li><a href="/orders" class="{{ request()->is('orders') ? 'active' : '' }}">ออเดอร์ของฉัน</a></li>
+          @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
+            <li><a href="/dashboard">Dashboard</a></li>
+          @endif
+        @endauth
+      @else
+        {{-- Backend Links --}}
+        <li><a href="/dashboard" class="{{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a></li>
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
+          <li><a href="/dashboard/products" class="{{ request()->is('dashboard/products*') ? 'active' : '' }}">จัดการเมนู</a></li>
+        @endif
+        @if(auth()->user()->role === 'admin')
+          <li><a href="/dashboard/orders" class="{{ request()->is('dashboard/orders*') ? 'active' : '' }}">จัดการออเดอร์</a></li>
+        @endif
+        <li><a href="/">หน้าเว็บ</a></li>
+      @endif
     </ul>
     
     <div style="display:flex; align-items:center; gap:8px;">
