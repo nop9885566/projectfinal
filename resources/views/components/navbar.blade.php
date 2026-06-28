@@ -1,3 +1,15 @@
+<style>
+  .mobile-auth { display: none; }
+  @media (max-width: 768px) {
+    .mobile-auth { 
+      display: block; 
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      text-align: center;
+    }
+  }
+</style>
 <nav id="navbar" class="{{ request()->is('/') ? '' : 'scrolled' }}">
   <div class="nav-wrap">
     <a href="/" class="nav-logo">
@@ -34,6 +46,18 @@
         @endif
         <li><a href="/">หน้าเว็บ</a></li>
       @endif
+      
+      {{-- Mobile Auth Links --}}
+      <li class="mobile-auth">
+        @auth
+          <form method="POST" action="{{ route('logout') }}" style="margin:0">
+            @csrf
+            <button type="submit" style="background:none; border:none; color:inherit; font:inherit; cursor:pointer; font-weight:500;">ออกจากระบบ</button>
+          </form>
+        @else
+          <a href="/login">เข้าสู่ระบบ</a>
+        @endauth
+      </li>
     </ul>
     
     <div style="display:flex; align-items:center; gap:8px;">
