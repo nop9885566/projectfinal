@@ -41,6 +41,7 @@ Route::middleware(['auth', 'role:staff,admin'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/orders', [OrderController::class, 'manage'])->name('orders.manage');
     Route::patch('/dashboard/orders/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::delete('/dashboard/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 // Profile

@@ -132,4 +132,11 @@ class OrderController extends Controller
 
         return back()->with('success', 'อัปเดตสถานะสำเร็จ');
     }
+
+    // พนักงาน/Admin ลบออเดอร์
+    public function destroy(Order $order)
+    {
+        $order->delete();
+        return back()->with('success', 'ลบออเดอร์เรียบร้อยแล้ว');
+    }
 }

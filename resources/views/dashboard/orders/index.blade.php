@@ -75,20 +75,28 @@
           @endif
         </div>
 
-        {{-- อัปเดตสถานะ --}}
-        <form method="POST" action="{{ route('orders.updateStatus', $order->id) }}" style="display:flex;gap:.5rem">
-          @csrf
-          @method('PATCH')
-          <select name="status"
-                  style="padding:.5rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
-            <option value="pending"    {{ $order->status=='pending'    ? 'selected' : '' }}>⏳ รอดำเนินการ</option>
-            <option value="confirmed"  {{ $order->status=='confirmed'  ? 'selected' : '' }}>✅ ยืนยันแล้ว</option>
-            <option value="preparing"  {{ $order->status=='preparing'  ? 'selected' : '' }}>👨‍🍳 กำลังเตรียม</option>
-            <option value="completed"  {{ $order->status=='completed'  ? 'selected' : '' }}>🎉 เสร็จแล้ว</option>
-            <option value="cancelled"  {{ $order->status=='cancelled'  ? 'selected' : '' }}>❌ ยกเลิก</option>
-          </select>
-          <button type="submit" class="btn btn-primary" style="padding:.5rem 1rem">อัปเดต</button>
-        </form>
+        {{-- อัปเดตสถานะและลบ --}}
+        <div style="display:flex; gap:.5rem;">
+          <form method="POST" action="{{ route('orders.updateStatus', $order->id) }}" style="display:flex;gap:.5rem">
+            @csrf
+            @method('PATCH')
+            <select name="status"
+                    style="padding:.5rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
+              <option value="pending"    {{ $order->status=='pending'    ? 'selected' : '' }}>⏳ รอดำเนินการ</option>
+              <option value="confirmed"  {{ $order->status=='confirmed'  ? 'selected' : '' }}>✅ ยืนยันแล้ว</option>
+              <option value="preparing"  {{ $order->status=='preparing'  ? 'selected' : '' }}>👨‍🍳 กำลังเตรียม</option>
+              <option value="completed"  {{ $order->status=='completed'  ? 'selected' : '' }}>🎉 เสร็จแล้ว</option>
+              <option value="cancelled"  {{ $order->status=='cancelled'  ? 'selected' : '' }}>❌ ยกเลิก</option>
+            </select>
+            <button type="submit" class="btn btn-primary" style="padding:.5rem 1rem">อัปเดต</button>
+          </form>
+
+          <form method="POST" action="{{ route('orders.destroy', $order->id) }}" onsubmit="return confirm('ยืนยันการลบออเดอร์นี้? ข้อมูลจะถูกลบถาวร');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" style="background:#dc3545; color:white; padding:.5rem 1rem; border:none; border-radius:8px; cursor:pointer;" title="ลบออเดอร์"><i class="fa-solid fa-trash"></i></button>
+          </form>
+        </div>
       </div>
 
       {{-- รายการสินค้า --}}
