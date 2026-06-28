@@ -4,27 +4,35 @@
       <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="<?php echo e(request()->is('/') ? 'active' : ''); ?>">หน้าแรก</a></li>
-      <?php if(request()->is('/')): ?>
-        <li><a href="#about">เกี่ยวกับเรา</a></li>
-      <?php endif; ?>
-      <li><a href="/menu" class="<?php echo e(request()->is('menu') ? 'active' : ''); ?>">เมนู</a></li>
-      <?php if(!request()->is('/')): ?>
-        <li><a href="/gallery" class="<?php echo e(request()->is('gallery') ? 'active' : ''); ?>">แกลเลอรี</a></li>
-      <?php endif; ?>
-      <?php if(request()->is('/')): ?>
-        <li><a href="#contact">ติดต่อ</a></li>
-      <?php endif; ?>
-      
-      <?php if(auth()->guard()->check()): ?>
-        <li><a href="/orders" class="<?php echo e(request()->is('orders') ? 'active' : ''); ?>">ออเดอร์ของฉัน</a></li>
-        <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
-          <li><a href="/dashboard" class="<?php echo e(request()->is('dashboard') ? 'active' : ''); ?>">Dashboard</a></li>
-          <li><a href="/dashboard/products" class="<?php echo e(request()->is('dashboard/products*') ? 'active' : ''); ?>">จัดการเมนู</a></li>
-          <?php if(auth()->user()->role === 'admin'): ?>
-            <li><a href="/dashboard/orders" class="<?php echo e(request()->is('dashboard/orders*') ? 'active' : ''); ?>">จัดการออเดอร์</a></li>
+      <?php if(!request()->is('dashboard*')): ?>
+        
+        <li><a href="/" class="<?php echo e(request()->is('/') ? 'active' : ''); ?>">หน้าแรก</a></li>
+        <?php if(request()->is('/')): ?>
+          <li><a href="#about">เกี่ยวกับเรา</a></li>
+        <?php endif; ?>
+        <li><a href="/menu" class="<?php echo e(request()->is('menu') ? 'active' : ''); ?>">เมนู</a></li>
+        <?php if(!request()->is('/')): ?>
+          <li><a href="/gallery" class="<?php echo e(request()->is('gallery') ? 'active' : ''); ?>">แกลเลอรี</a></li>
+        <?php endif; ?>
+        <?php if(request()->is('/')): ?>
+          <li><a href="#contact">ติดต่อ</a></li>
+        <?php endif; ?>
+        <?php if(auth()->guard()->check()): ?>
+          <li><a href="/orders" class="<?php echo e(request()->is('orders') ? 'active' : ''); ?>">ออเดอร์ของฉัน</a></li>
+          <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
+            <li><a href="/dashboard">Dashboard</a></li>
           <?php endif; ?>
         <?php endif; ?>
+      <?php else: ?>
+        
+        <li><a href="/dashboard" class="<?php echo e(request()->is('dashboard') ? 'active' : ''); ?>">Dashboard</a></li>
+        <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
+          <li><a href="/dashboard/products" class="<?php echo e(request()->is('dashboard/products*') ? 'active' : ''); ?>">จัดการเมนู</a></li>
+        <?php endif; ?>
+        <?php if(auth()->user()->role === 'admin'): ?>
+          <li><a href="/dashboard/orders" class="<?php echo e(request()->is('dashboard/orders*') ? 'active' : ''); ?>">จัดการออเดอร์</a></li>
+        <?php endif; ?>
+        <li><a href="/">หน้าเว็บ</a></li>
       <?php endif; ?>
     </ul>
     

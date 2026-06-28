@@ -11,23 +11,7 @@
 </head>
 <body>
 
-<nav id="navbar" class="scrolled">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/">หน้าแรก</a></li>
-      <li><a href="/menu">เมนู</a></li>
-      <li><a href="/gallery">แกลเลอรี</a></li>
-      <li><a href="/orders" class="active">ออเดอร์ของฉัน</a></li>
-    </ul>
-    <form method="POST" action="<?php echo e(route('logout')); ?>" style="margin:0">
-      <?php echo csrf_field(); ?>
-      <button type="submit" class="btn-nav">ออกจากระบบ</button>
-    </form>
-  </div>
-</nav>
+<?php echo $__env->make('components.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <div style="padding: 120px 2rem 2rem">
   <div class="container">
@@ -91,6 +75,7 @@
 
   </div>
 </div>
+
 
 </body>
 </html><?php /**PATH /var/www/html/resources/views/orders/index.blade.php ENDPATH**/ ?>

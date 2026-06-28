@@ -67,7 +67,7 @@
       <div style="text-align:center;color:#999;padding:3rem">
         <div style="font-size:3rem">🛒</div>
         <p>ยังไม่มีออเดอร์</p>
-        <a href="/menu" class="btn btn-primary">สั่งอาหารเลย</a>
+        <a href="/menu" class="btn btn-primary">สั่งเลย</a>
       </div>
     @endforelse
 
