@@ -30,12 +30,10 @@
   <p style="color: var(--text-light); margin-top: 0.5rem;">กรุณาสแกน QR Code ด้านล่างเพื่อชำระเงิน</p>
 
   <div class="qr-box">
-    <!-- PromptPay QR Code via promptpay.io API -->
-    <img src="https://promptpay.io/0888888888/{{ $order->total_price }}.png" alt="PromptPay QR">
-    <div style="margin-top: 1rem; color: var(--text-muted); font-size: 0.95rem;">
-      <strong>พร้อมเพย์: 088-888-8888</strong><br>
-      (บจก. บรรจง คาเฟ่)
-    </div>
+    
+    <img src="{{ asset('images/my-qr.jpg') }}" alt="QR Code ของร้าน">
+
+    
   </div>
 
   <div class="total-price">
