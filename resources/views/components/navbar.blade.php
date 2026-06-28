@@ -5,8 +5,16 @@
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">หน้าแรก</a></li>
+      @if(request()->is('/'))
+        <li><a href="#about">เกี่ยวกับเรา</a></li>
+      @endif
       <li><a href="/menu" class="{{ request()->is('menu') ? 'active' : '' }}">เมนู</a></li>
-      <li><a href="/gallery" class="{{ request()->is('gallery') ? 'active' : '' }}">แกลเลอรี</a></li>
+      @if(!request()->is('/'))
+        <li><a href="/gallery" class="{{ request()->is('gallery') ? 'active' : '' }}">แกลเลอรี</a></li>
+      @endif
+      @if(request()->is('/'))
+        <li><a href="#contact">ติดต่อ</a></li>
+      @endif
       
       @auth
         <li><a href="/orders" class="{{ request()->is('orders') ? 'active' : '' }}">ออเดอร์ของฉัน</a></li>
@@ -20,14 +28,19 @@
       @endauth
     </ul>
     
-    @auth
-      <form method="POST" action="{{ route('logout') }}" style="margin:0">
-        @csrf
-        <button type="submit" class="btn-nav" style="background:var(--brown); border:none; cursor:pointer">ออกจากระบบ</button>
-      </form>
-    @else
-      <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
-    @endauth
+    <div style="display:flex; align-items:center; gap:8px;">
+      @if(request()->is('/'))
+        <a href="/menu" class="btn-nav" style="margin-right:4px">สั่งซื้อ</a>
+      @endif
+      @auth
+        <form method="POST" action="{{ route('logout') }}" style="margin:0">
+          @csrf
+          <button type="submit" class="btn-nav" style="background:var(--brown); border:none; cursor:pointer">ออกจากระบบ</button>
+        </form>
+      @else
+        <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
+      @endauth
+    </div>
 
     <button class="hamburger" id="hamburger" aria-label="toggle menu">
       <span></span><span></span><span></span>

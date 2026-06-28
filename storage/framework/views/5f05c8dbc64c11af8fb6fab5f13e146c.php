@@ -257,37 +257,7 @@
 </head>
 <body>
 
-
-<nav id="navbar" class="scrolled">
-  <div class="nav-wrap">
-    <a href="/" class="nav-logo">
-      <i class="fa-solid fa-mug-hot"></i> บรรจงคาเฟ่
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/">หน้าแรก</a></li>
-      <li><a href="/menu" class="active">เมนู</a></li>
-      <?php if(auth()->guard()->check()): ?>
-        <li><a href="/orders">ออเดอร์ของฉัน</a></li>
-        <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
-          <li><a href="/dashboard">Dashboard</a></li>
-        <?php endif; ?>
-      <?php endif; ?>
-    </ul>
-    <div style="display:flex; align-items:center; gap:8px">
-      <?php if(auth()->guard()->check()): ?>
-        <form method="POST" action="<?php echo e(route('logout')); ?>" style="margin:0">
-          <?php echo csrf_field(); ?>
-          <button type="submit" class="btn-nav" style="background:var(--brown); border:none; cursor:pointer">ออกจากระบบ</button>
-        </form>
-      <?php else: ?>
-        <a href="/login" class="btn-nav">เข้าสู่ระบบ</a>
-      <?php endif; ?>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+<?php echo $__env->make('components.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 
 <section id="menu" class="section" style="padding-top:120px; background:var(--cream); min-height:100vh">
@@ -436,13 +406,6 @@ function switchTab(id, btn) {
   requestAnimationFrame(() => { grid.style.transition = 'opacity .4s ease'; grid.style.opacity = '1'; });
 }
 
-// Hamburger
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open');
-});
 
 // JavaScript Cart & Modal System
 let currentProduct = null;
