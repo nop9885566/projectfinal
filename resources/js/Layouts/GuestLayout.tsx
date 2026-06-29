@@ -11,7 +11,7 @@ export default function Guest({ children }: PropsWithChildren) {
                             <i className="fa-solid fa-mug-hot"></i>
                         </div>
                         <span className="mt-3 text-2xl font-bold text-cafe-brown-dark tracking-wide">บรรจงคาเฟ่</span>
-                        <span className="text-xs text-cafe-green tracking-widest uppercase font-semibold">Banjong Cafe</span>
+                        <span className="text-xs text-cafe-green tracking-widest uppercase font-semibold">Banchong Cafe</span>
                     </Link>
                 </div>
 
