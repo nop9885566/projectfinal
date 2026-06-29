@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+echo "=== [0/5] Pre-flight checks ==="
+if [ ! -f .env ]; then
+    echo "No .env found, creating one..."
+    cp .env.example .env || touch .env
+fi
+touch database/database.sqlite || true
+
 echo "=== [1/5] Generating app key if missing ==="
 php artisan key:generate --no-interaction --force 2>/dev/null || echo "Key already set or failed (non-fatal)"
 
