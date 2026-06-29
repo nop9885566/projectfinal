@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\LineBotService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -77,6 +78,20 @@ class OrderController extends Controller
 
         $order->orderItems()->createMany($orderItems);
 
+        // Send LINE Bot Notification for new order
+        try {
+            $lineBot = app(LineBotService::class);
+            $message = "🟢 มีออเดอร์ใหม่!\n";
+            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+            $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2) . "\n";
+            $message .= "สถานะ: รอชำระเงิน";
+            
+            $lineBot->sendTextMessage($message);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("LINE Bot Error on store: " . $e->getMessage());
+        }
+
         // Redirect to payment page
         return redirect()->route('orders.payment', $order->id)->with('success', 'สั่งซื้อสำเร็จ กรุณาชำระเงิน');
     }
@@ -102,6 +117,22 @@ class OrderController extends Controller
                 'slip_image' => $path,
                 'payment_status' => 'paid',
             ]);
+
+            // Send LINE Bot Notification for slip upload
+            try {
+                $lineBot = app(LineBotService::class);
+                $message = "💰 แจ้งอัปโหลดสลิป!\n";
+                $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+                $message .= "ยอดชำระ: ฿" . number_format($order->total_price, 2) . "\n";
+                $message .= "กรุณาตรวจสอบสลิปในระบบ";
+                
+                // Get absolute URL to the slip image
+                $imageUrl = asset('storage/' . $path);
+                
+                $lineBot->sendImageMessage($message, $imageUrl);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("LINE Bot Error on uploadSlip: " . $e->getMessage());
+            }
         }
 
         if (auth()->check()) {

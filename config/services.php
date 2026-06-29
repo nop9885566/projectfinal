@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'line' => [
+        'bot_channel_access_token' => env('LINE_BOT_CHANNEL_ACCESS_TOKEN'),
+        'admin_user_id' => env('LINE_ADMIN_USER_ID'),
+    ],
+
 ];

@@ -1,3 +1,15 @@
+<style>
+  .mobile-auth { display: none; }
+  @media (max-width: 768px) {
+    .mobile-auth { 
+      display: block; 
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      text-align: center;
+    }
+  }
+</style>
 <nav id="navbar" class="<?php echo e(request()->is('/') ? '' : 'scrolled'); ?>">
   <div class="nav-wrap">
     <a href="/" class="nav-logo">
@@ -34,6 +46,18 @@
         <?php endif; ?>
         <li><a href="/">หน้าเว็บ</a></li>
       <?php endif; ?>
+      
+      
+      <li class="mobile-auth">
+        <?php if(auth()->guard()->check()): ?>
+          <form method="POST" action="<?php echo e(route('logout')); ?>" style="margin:0">
+            <?php echo csrf_field(); ?>
+            <button type="submit" style="background:none; border:none; color:inherit; font:inherit; cursor:pointer; font-weight:500;">ออกจากระบบ</button>
+          </form>
+        <?php else: ?>
+          <a href="/login">เข้าสู่ระบบ</a>
+        <?php endif; ?>
+      </li>
     </ul>
     
     <div style="display:flex; align-items:center; gap:8px;">

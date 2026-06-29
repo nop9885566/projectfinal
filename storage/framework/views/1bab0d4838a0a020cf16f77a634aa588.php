@@ -30,7 +30,7 @@
   <p style="color: var(--text-light); margin-top: 0.5rem;">กรุณาสแกน QR Code ด้านล่างเพื่อชำระเงิน</p>
 
   <div class="qr-box">
-    <!-- PromptPay QR Code via promptpay.io API -->
+    
     <img src="<?php echo e(asset('images/my-qr.jpg')); ?>" alt="QR Code ของร้าน">
 
     
