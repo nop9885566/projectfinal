@@ -23,9 +23,7 @@
           <li><a href="#about">เกี่ยวกับเรา</a></li>
         @endif
         <li><a href="/menu" class="{{ request()->is('menu') ? 'active' : '' }}">เมนู</a></li>
-        @if(!request()->is('/'))
-          <li><a href="/gallery" class="{{ request()->is('gallery') ? 'active' : '' }}">แกลเลอรี</a></li>
-        @endif
+
         @if(request()->is('/'))
           <li><a href="#contact">ติดต่อ</a></li>
         @endif

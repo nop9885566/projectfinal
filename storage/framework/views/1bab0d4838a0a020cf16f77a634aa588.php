@@ -62,8 +62,14 @@ unset($__errorArgs, $__bag); ?>
     </button>
   </form>
 
-  <div style="margin-top: 2rem;">
-    <a href="/menu" style="color: var(--text-light); text-decoration: none; font-size: 0.9rem; transition: color 0.2s;" onmouseover="this.style.color='var(--brown-dark)'" onmouseout="this.style.color='var(--text-light)'"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเมนู (ชำระภายหลัง)</a>
+  <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+    <form action="<?php echo e(route('orders.payLater', $order->id)); ?>" method="POST">
+      <?php echo csrf_field(); ?>
+      <button type="submit" class="btn" style="width: 100%; justify-content: center; background: var(--beige); color: var(--brown-dark); font-size: 1rem; padding: 0.8rem; border-radius: 12px; font-weight: 500;">
+        <i class="fa-solid fa-clock"></i> จ่ายเงินภายหลัง (หน้าร้าน)
+      </button>
+    </form>
+    <a href="/menu" style="color: var(--text-light); text-decoration: none; font-size: 0.9rem; transition: color 0.2s;" onmouseover="this.style.color='var(--brown-dark)'" onmouseout="this.style.color='var(--text-light)'"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเมนู</a>
   </div>
 </div>
 

@@ -23,9 +23,7 @@
           <li><a href="#about">เกี่ยวกับเรา</a></li>
         <?php endif; ?>
         <li><a href="/menu" class="<?php echo e(request()->is('menu') ? 'active' : ''); ?>">เมนู</a></li>
-        <?php if(!request()->is('/')): ?>
-          <li><a href="/gallery" class="<?php echo e(request()->is('gallery') ? 'active' : ''); ?>">แกลเลอรี</a></li>
-        <?php endif; ?>
+
         <?php if(request()->is('/')): ?>
           <li><a href="#contact">ติดต่อ</a></li>
         <?php endif; ?>

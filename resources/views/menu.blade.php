@@ -447,13 +447,10 @@ function openOrderModal(product) {
         <h4>ประเภทเครื่องดื่ม</h4>
         <div class="option-items">
           <input type="radio" id="type-hot" name="drink-type" value="ร้อน" class="option-input" checked onchange="calculateModalPrice()">
-          <label for="type-hot" class="option-label">🔥 ร้อน (+฿0)</label>
+          <label for="type-hot" class="option-label">🔥 ร้อน</label>
           
           <input type="radio" id="type-iced" name="drink-type" value="เย็น" class="option-input" onchange="calculateModalPrice()">
-          <label for="type-iced" class="option-label">❄️ เย็น (+฿0)</label>
-          
-          <input type="radio" id="type-frappe" name="drink-type" value="ปั่น" class="option-input" onchange="calculateModalPrice()">
-          <label for="type-frappe" class="option-label">🌪️ ปั่น (+฿10)</label>
+          <label for="type-iced" class="option-label">❄️ เย็น</label>
         </div>
       </div>
       <div class="option-group">
@@ -472,12 +469,6 @@ function openOrderModal(product) {
       <div class="option-group">
         <h4>ท็อปปิ้ง / เพิ่มเติม</h4>
         <div class="option-items">
-          <input type="checkbox" id="addon-pearl" value="ไข่มุก (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-pearl" class="option-label">+ ไข่มุก (+฿10)</label>
-          
-          <input type="checkbox" id="addon-jelly" value="เจลลี่บุก (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-jelly" class="option-label">+ เจลลี่บุก (+฿10)</label>
-          
           <input type="checkbox" id="addon-whip" value="วิปครีม (+15฿)" class="option-input" onchange="calculateModalPrice()">
           <label for="addon-whip" class="option-label">+ วิปครีม (+฿15)</label>
           
@@ -524,11 +515,6 @@ function calculateModalPrice() {
   let extra = 0;
   
   if (currentProduct.category === 'coffee' || currentProduct.category === 'noncoffee') {
-    const typeFrappe = document.getElementById('type-frappe');
-    if (typeFrappe && typeFrappe.checked) extra += 10;
-    
-    if (document.getElementById('addon-pearl') && document.getElementById('addon-pearl').checked) extra += 10;
-    if (document.getElementById('addon-jelly') && document.getElementById('addon-jelly').checked) extra += 10;
     if (document.getElementById('addon-whip') && document.getElementById('addon-whip').checked) extra += 15;
     if (document.getElementById('addon-shot') && document.getElementById('addon-shot').checked) extra += 15;
   } else if (currentProduct.category === 'bakery') {
@@ -562,7 +548,7 @@ function addModalItemToCart() {
     if (typeRadio) options.push(typeRadio.value);
     if (sweetRadio) options.push(sweetRadio.value);
     
-    ['addon-pearl', 'addon-jelly', 'addon-whip', 'addon-shot'].forEach(id => {
+    ['addon-whip', 'addon-shot'].forEach(id => {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });
@@ -647,9 +633,6 @@ function updateCartUI() {
       let base = parseFloat(item.price);
       let extra = 0;
       if (item.options) {
-        if (item.options.includes('ปั่น')) extra += 10;
-        if (item.options.includes('ไข่มุก')) extra += 10;
-        if (item.options.includes('เจลลี่')) extra += 10;
         if (item.options.includes('วิปครีม')) extra += 15;
         if (item.options.includes('เพิ่มช็อต')) extra += 15;
         if (item.options.includes('เนย/แยม')) extra += 10;

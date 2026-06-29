@@ -48,7 +48,7 @@
             <option value="coffee"    {{ old('category', $product->category)=='coffee'    ? 'selected' : '' }}>☕ Coffee</option>
             <option value="noncoffee" {{ old('category', $product->category)=='noncoffee' ? 'selected' : '' }}>🧋 Non-Coffee</option>
             <option value="bakery"    {{ old('category', $product->category)=='bakery'    ? 'selected' : '' }}>🥐 Bakery</option>
-            <option value="food"      {{ old('category', $product->category)=='food'      ? 'selected' : '' }}>🍽️ Food</option>
+            
           </select>
         </div>
 

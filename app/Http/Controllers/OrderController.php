@@ -47,9 +47,6 @@ class OrderController extends Controller
             
             // บวกราคาเพิ่มตามออปชั่นที่เลือก
             if ($optionsText) {
-                if (str_contains($optionsText, 'ปั่น')) $itemPrice += 10;
-                if (str_contains($optionsText, 'ไข่มุก')) $itemPrice += 10;
-                if (str_contains($optionsText, 'เจลลี่')) $itemPrice += 10;
                 if (str_contains($optionsText, 'วิปครีม')) $itemPrice += 15;
                 if (str_contains($optionsText, 'เพิ่มช็อต')) $itemPrice += 15;
                 if (str_contains($optionsText, 'เนย/แยม')) $itemPrice += 10;
@@ -86,24 +83,6 @@ class OrderController extends Controller
 
         $order->orderItems()->createMany($orderItems);
 
-        // Send LINE Bot Notification for new order
-        try {
-            $lineBot = app(LineBotService::class);
-            $message = "🟢 มีออเดอร์ใหม่!\n";
-            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
-            $message .= "ลูกค้า: " . $order->customer_name . "\n";
-            if (!empty($order->note)) {
-                $message .= "หมายเหตุ: " . $order->note . "\n";
-            }
-            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
-            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2) . "\n";
-            $message .= "สถานะ: รอชำระเงิน";
-            
-            $lineBot->sendTextMessage($message);
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("LINE Bot Error on store: " . $e->getMessage());
-        }
-
         // Redirect to payment page
         return redirect()->route('orders.payment', $order->id)->with('success', 'สั่งซื้อสำเร็จ กรุณาชำระเงิน');
     }
@@ -132,11 +111,26 @@ class OrderController extends Controller
 
             // Send LINE Bot Notification for slip upload
             try {
+                $order->load('orderItems.product');
+                $itemsText = "";
+                foreach ($order->orderItems as $item) {
+                    $itemsText .= "- " . $item->product->name . " x" . $item->quantity;
+                    if ($item->options) {
+                        $itemsText .= " (" . $item->options . ")";
+                    }
+                    $itemsText .= "\n";
+                }
+
                 $lineBot = app(LineBotService::class);
-                $message = "💰 แจ้งอัปโหลดสลิป!\n";
+                $message = "💰 แจ้งชำระเงิน (ออเดอร์ใหม่)!\n";
                 $message .= "รหัสออเดอร์: #" . $order->id . "\n";
-                $message .= "ยอดชำระ: ฿" . number_format($order->total_price, 2) . "\n";
-                $message .= "กรุณาตรวจสอบสลิปในระบบ";
+                $message .= "ลูกค้า: " . $order->customer_name . "\n";
+                $message .= "เบอร์โทร: " . ($order->customer_phone ?: 'ไม่ระบุ') . "\n";
+                if (!empty($order->note)) {
+                    $message .= "หมายเหตุ: " . $order->note . "\n";
+                }
+                $message .= "รายการสั่งซื้อ:\n" . $itemsText;
+                $message .= "ยอดชำระ: ฿" . number_format($order->total_price, 2);
                 
                 // Get absolute URL to the slip image
                 $imageUrl = asset('storage/' . $path);
@@ -151,6 +145,43 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('success', 'อัปโหลดสลิปสำเร็จ รอการตรวจสอบจากร้าน');
         } else {
             return redirect()->route('menu')->with('success', 'ส่งคำสั่งซื้อและสลิปสำเร็จ! เรากำลังดำเนินการให้ครับ');
+        }
+    }
+
+    public function payLater(Order $order)
+    {
+        // Send LINE Bot Notification for pay later
+        try {
+            $order->load('orderItems.product');
+            $itemsText = "";
+            foreach ($order->orderItems as $item) {
+                $itemsText .= "- " . $item->product->name . " x" . $item->quantity;
+                if ($item->options) {
+                    $itemsText .= " (" . $item->options . ")";
+                }
+                $itemsText .= "\n";
+            }
+
+            $lineBot = app(LineBotService::class);
+            $message = "⏳ ลูกค้าแจ้งขอชำระเงินภายหลัง (หน้าร้าน)!\n";
+            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+            $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            $message .= "เบอร์โทร: " . ($order->customer_phone ?: 'ไม่ระบุ') . "\n";
+            if (!empty($order->note)) {
+                $message .= "หมายเหตุ: " . $order->note . "\n";
+            }
+            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
+            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
+            
+            $lineBot->sendTextMessage($message);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("LINE Bot Error on payLater: " . $e->getMessage());
+        }
+
+        if (auth()->check()) {
+            return redirect()->route('orders.index')->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว กรุณาชำระเงินที่หน้าร้าน');
+        } else {
+            return redirect()->route('menu')->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว! กรุณาชำระเงินและรับสินค้าที่หน้าร้านครับ');
         }
     }
 

@@ -17,9 +17,6 @@ Route::get('/menu', function () {
     return view('menu', compact('products'));
 })->name('menu');
 
-Route::get('/gallery', function () {
-    return view('gallery');
-})->name('gallery');
 
 // ลูกค้า Login แล้วใช้ได้
 Route::middleware(['auth'])->group(function () {
@@ -30,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])->name('orders.payment');
 Route::post('/orders/{order}/payment', [OrderController::class, 'uploadSlip'])->name('orders.uploadSlip');
+Route::post('/orders/{order}/pay-later', [OrderController::class, 'payLater'])->name('orders.payLater');
 
 // พนักงาน + Admin (แดชบอร์ดและการจัดการเมนู)
 Route::middleware(['auth', 'role:staff,admin'])->group(function () {
