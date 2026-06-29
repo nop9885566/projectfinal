@@ -36,6 +36,7 @@ class OrderController extends Controller
 
         $total = 0;
         $orderItems = [];
+        $itemsText = "";
 
         foreach ($request->items as $item) {
             $product = Product::findOrFail($item['id']);
@@ -65,6 +66,13 @@ class OrderController extends Controller
                 'price'      => $itemPrice,
                 'options'    => $optionsText ?: null,
             ];
+
+            // สร้างข้อความรายการอาหารสำหรับส่ง LINE
+            $itemsText .= "- " . $product->name . " x" . $item['qty'];
+            if ($optionsText) {
+                $itemsText .= " (" . $optionsText . ")";
+            }
+            $itemsText .= "\n";
         }
 
         $order = Order::create([
@@ -84,6 +92,10 @@ class OrderController extends Controller
             $message = "🟢 มีออเดอร์ใหม่!\n";
             $message .= "รหัสออเดอร์: #" . $order->id . "\n";
             $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            if (!empty($order->note)) {
+                $message .= "หมายเหตุ: " . $order->note . "\n";
+            }
+            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
             $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2) . "\n";
             $message .= "สถานะ: รอชำระเงิน";
             

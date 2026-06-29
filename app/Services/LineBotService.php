@@ -29,22 +29,30 @@ class LineBotService
             return false;
         }
 
-        $response = Http::withToken($this->token)->post($this->apiUrl, [
-            'to' => $this->adminUserId,
-            'messages' => [
-                [
-                    'type' => 'text',
-                    'text' => $message,
-                ],
-            ],
-        ]);
+        $adminIds = explode(',', $this->adminUserId);
+        $success = true;
 
-        if ($response->failed()) {
-            Log::error('LINE Bot API Error: ' . $response->body());
-            return false;
+        foreach ($adminIds as $adminId) {
+            $adminId = trim($adminId);
+            if (empty($adminId)) continue;
+
+            $response = Http::withToken($this->token)->post($this->apiUrl, [
+                'to' => $adminId,
+                'messages' => [
+                    [
+                        'type' => 'text',
+                        'text' => $message,
+                    ],
+                ],
+            ]);
+
+            if ($response->failed()) {
+                Log::error('LINE Bot API Error (Text) for ' . $adminId . ': ' . $response->body());
+                $success = false;
+            }
         }
 
-        return true;
+        return $success;
     }
 
     /**
@@ -60,27 +68,35 @@ class LineBotService
             return false;
         }
 
-        $response = Http::withToken($this->token)->post($this->apiUrl, [
-            'to' => $this->adminUserId,
-            'messages' => [
-                [
-                    'type' => 'text',
-                    'text' => $message,
-                ],
-                [
-                    'type' => 'image',
-                    'originalContentUrl' => $imageUrl,
-                    'previewImageUrl' => $imageUrl,
-                ],
-            ],
-        ]);
+        $adminIds = explode(',', $this->adminUserId);
+        $success = true;
 
-        if ($response->failed()) {
-            Log::error('LINE Bot API Error (Image): ' . $response->body());
-            return false;
+        foreach ($adminIds as $adminId) {
+            $adminId = trim($adminId);
+            if (empty($adminId)) continue;
+
+            $response = Http::withToken($this->token)->post($this->apiUrl, [
+                'to' => $adminId,
+                'messages' => [
+                    [
+                        'type' => 'text',
+                        'text' => $message,
+                    ],
+                    [
+                        'type' => 'image',
+                        'originalContentUrl' => $imageUrl,
+                        'previewImageUrl' => $imageUrl,
+                    ],
+                ],
+            ]);
+
+            if ($response->failed()) {
+                Log::error('LINE Bot API Error (Image) for ' . $adminId . ': ' . $response->body());
+                $success = false;
+            }
         }
 
-        return true;
+        return $success;
     }
 
     /**
