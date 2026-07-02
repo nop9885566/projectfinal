@@ -275,30 +275,52 @@
     </div>
 
     {{-- Coffee --}}
-    <div class="menu-grid active" id="tab-coffee">
-      @forelse($products->where('category', 'coffee') as $product)
-        @include('partials.menu-card', compact('product'))
-      @empty
-        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูกาแฟในขณะนี้</div>
-      @endforelse
+    <div class="menu-tab-content active" id="tab-coffee">
+      @php $coffeeSubcategories = ['Special', 'Black', 'White', 'Milk']; @endphp
+      @foreach($coffeeSubcategories as $subcat)
+        @php $subcatProducts = $products->where('category', 'coffee')->where('subcategory', $subcat); @endphp
+        @if($subcatProducts->isNotEmpty())
+          <h3 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; color:var(--brown-dark); border-bottom:2px solid var(--beige); padding-bottom:0.5rem">{{ $subcat }}</h3>
+          <div class="menu-grid" style="display:grid;">
+            @foreach($subcatProducts as $product)
+              @include('partials.menu-card', compact('product'))
+            @endforeach
+          </div>
+        @endif
+      @endforeach
+      @if($products->where('category', 'coffee')->isEmpty())
+        <div style="text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูกาแฟในขณะนี้</div>
+      @endif
     </div>
 
     {{-- Non-Coffee --}}
-    <div class="menu-grid" id="tab-noncoffee">
-      @forelse($products->where('category', 'noncoffee') as $product)
-        @include('partials.menu-card', compact('product'))
-      @empty
-        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเครื่องดื่มทั่วไปในขณะนี้</div>
-      @endforelse
+    <div class="menu-tab-content" id="tab-noncoffee" style="display:none;">
+      @php $noncoffeeSubcategories = ['Cocoa', 'Tea', 'Refreshing']; @endphp
+      @foreach($noncoffeeSubcategories as $subcat)
+        @php $subcatProducts = $products->where('category', 'noncoffee')->where('subcategory', $subcat); @endphp
+        @if($subcatProducts->isNotEmpty())
+          <h3 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; color:var(--brown-dark); border-bottom:2px solid var(--beige); padding-bottom:0.5rem">{{ $subcat }}</h3>
+          <div class="menu-grid" style="display:grid;">
+            @foreach($subcatProducts as $product)
+              @include('partials.menu-card', compact('product'))
+            @endforeach
+          </div>
+        @endif
+      @endforeach
+      @if($products->where('category', 'noncoffee')->isEmpty())
+        <div style="text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเครื่องดื่มทั่วไปในขณะนี้</div>
+      @endif
     </div>
 
     {{-- Cake --}}
-    <div class="menu-grid" id="tab-bakery">
-      @forelse($products->where('category', 'bakery') as $product)
-        @include('partials.menu-card', compact('product'))
-      @empty
-        <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเค้กในขณะนี้</div>
-      @endforelse
+    <div class="menu-tab-content" id="tab-bakery" style="display:none;">
+      <div class="menu-grid" style="display:grid; margin-top:2rem;">
+        @forelse($products->where('category', 'bakery') as $product)
+          @include('partials.menu-card', compact('product'))
+        @empty
+          <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเค้กในขณะนี้</div>
+        @endforelse
+      </div>
     </div>
   </div>
 </section>
@@ -397,9 +419,13 @@
 
 <script>
 function switchTab(id, btn) {
-  document.querySelectorAll('.menu-grid').forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.menu-tab-content').forEach(g => {
+    g.classList.remove('active');
+    g.style.display = 'none';
+  });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const grid = document.getElementById('tab-' + id);
+  grid.style.display = 'block';
   grid.classList.add('active');
   grid.style.opacity = '0';
   btn.classList.add('active');
@@ -469,11 +495,17 @@ function openOrderModal(product) {
       <div class="option-group">
         <h4>ท็อปปิ้ง / เพิ่มเติม</h4>
         <div class="option-items">
-          <input type="checkbox" id="addon-whip" value="วิปครีม (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-whip" class="option-label">+ วิปครีม (+฿10)</label>
+          <input type="checkbox" id="addon-shot" value="เพิ่มช็อตเอสเปรสโซ่ (+20฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-shot" class="option-label">+ Extra shot (+฿20)</label>
           
-          <input type="checkbox" id="addon-shot" value="เพิ่มช็อตเอสเปรสโซ่ (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-shot" class="option-label">+ ช็อตกาแฟ (+฿10)</label>
+          <input type="checkbox" id="addon-oat" value="เปลี่ยนเป็นนมโอ๊ต (+15฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-oat" class="option-label">+ Oat milk (+฿15)</label>
+
+          <input type="checkbox" id="addon-whip" value="เพิ่มวิปครีม (+15฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-whip" class="option-label">+ Whipped cream (+฿15)</label>
+
+          <input type="checkbox" id="addon-pearl" value="เพิ่มบุก (+5฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-pearl" class="option-label">+ Konjac pearl (+฿5)</label>
         </div>
       </div>
     `;
@@ -492,8 +524,10 @@ function calculateModalPrice() {
   let extra = 0;
   
   if (currentProduct.category === 'coffee' || currentProduct.category === 'noncoffee') {
+    if (document.getElementById('addon-shot') && document.getElementById('addon-shot').checked) extra += 20;
+    if (document.getElementById('addon-oat') && document.getElementById('addon-oat').checked) extra += 15;
     if (document.getElementById('addon-whip') && document.getElementById('addon-whip').checked) extra += 15;
-    if (document.getElementById('addon-shot') && document.getElementById('addon-shot').checked) extra += 15;
+    if (document.getElementById('addon-pearl') && document.getElementById('addon-pearl').checked) extra += 5;
   } else if (currentProduct.category === 'bakery') {
     if (document.getElementById('addon-whip-bakery') && document.getElementById('addon-whip-bakery').checked) extra += 15;
     if (document.getElementById('addon-jam') && document.getElementById('addon-jam').checked) extra += 10;
@@ -525,7 +559,7 @@ function addModalItemToCart() {
     if (typeRadio) options.push(typeRadio.value);
     if (sweetRadio) options.push(sweetRadio.value);
     
-    ['addon-whip', 'addon-shot'].forEach(id => {
+    ['addon-shot', 'addon-oat', 'addon-whip', 'addon-pearl'].forEach(id => {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });
@@ -610,8 +644,10 @@ function updateCartUI() {
       let base = parseFloat(item.price);
       let extra = 0;
       if (item.options) {
+        if (item.options.includes('เพิ่มช็อต')) extra += 20;
+        if (item.options.includes('นมโอ๊ต')) extra += 15;
         if (item.options.includes('วิปครีม')) extra += 15;
-        if (item.options.includes('เพิ่มช็อต')) extra += 15;
+        if (item.options.includes('เพิ่มบุก')) extra += 5;
         if (item.options.includes('เนย/แยม')) extra += 10;
       }
       

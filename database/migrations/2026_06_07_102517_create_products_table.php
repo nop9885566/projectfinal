@@ -15,6 +15,7 @@ return new class extends Migration
         $table->id();
         $table->string('name');
         $table->string('category'); // coffee, noncoffee, bakery, food
+        $table->string('subcategory')->nullable();
         $table->text('description')->nullable();
         $table->decimal('price', 8, 2);
         $table->string('image')->nullable();
