@@ -130,8 +130,8 @@
           </div>
         </div>
         <div class="socials">
-          <a href="https://www.facebook.com/banchongcafe" class="social-btn fb"><i class="fa-brands fa-facebook-f"></i> Barjong Cafe (Facebook)</a>          
-          <a href="https://www.instagram.com/banchong.cafe/" class="social-btn ig"><i class="fa-brands fa-instagram"></i> @barjong.cafe (Instagram)</a>
+          <a href="https://www.facebook.com/banchongcafe" class="social-btn fb"><i class="fa-brands fa-facebook-f"></i> Banchong Cafe (Facebook)</a>          
+          <a href="https://www.instagram.com/banchong.cafe/" class="social-btn ig"><i class="fa-brands fa-instagram"></i> @banchong.cafe (Instagram)</a>
         </div>
       </div>
       <div data-reveal style="transition-delay:.15s">

@@ -362,7 +362,7 @@
       </div>
       <div style="margin-top:1rem">
         <label for="cart-note" style="display:block; font-size:.8rem; color:var(--text-light); margin-bottom:.3rem">หมายเหตุถึงทางร้าน:</label>
-        <textarea id="cart-note" rows="2" style="width:100%; border:1px solid var(--beige); border-radius:8px; padding:.5rem; font-family:inherit; font-size:.85rem; outline:none; resize:none" placeholder="เช่น หวานน้อยพิเศษ, แยกน้ำแข็ง..."></textarea>
+        <textarea id="cart-note" rows="2" style="width:100%; border:1px solid var(--beige); border-radius:8px; padding:.5rem; font-family:inherit; font-size:.85rem; outline:none; resize:none" placeholder="เช่น ที่อยู่จัดส่ง,หวานน้อยพิเศษ, แยกน้ำแข็ง..."></textarea>
       </div>
 
       @guest
@@ -390,7 +390,7 @@
 <footer>
   <div class="container">
     <div class="footer-bottom" style="border-top:none; padding-top:0">
-      <p>© 2026 บรรจงคาเฟ่ (Barjong Cafe). All Rights Reserved.</p>
+      <p>© 2026 บรรจงคาเฟ่ (Banchong Cafe). All Rights Reserved.</p>
     </div>
   </div>
 </footer>
@@ -469,38 +469,15 @@ function openOrderModal(product) {
       <div class="option-group">
         <h4>ท็อปปิ้ง / เพิ่มเติม</h4>
         <div class="option-items">
-          <input type="checkbox" id="addon-whip" value="วิปครีม (+15฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-whip" class="option-label">+ วิปครีม (+฿15)</label>
+          <input type="checkbox" id="addon-whip" value="วิปครีม (+10฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-whip" class="option-label">+ วิปครีม (+฿10)</label>
           
-          <input type="checkbox" id="addon-shot" value="เพิ่มช็อตเอสเปรสโซ่ (+15฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-shot" class="option-label">+ ช็อตกาแฟ (+฿15)</label>
+          <input type="checkbox" id="addon-shot" value="เพิ่มช็อตเอสเปรสโซ่ (+10฿)" class="option-input" onchange="calculateModalPrice()">
+          <label for="addon-shot" class="option-label">+ ช็อตกาแฟ (+฿10)</label>
         </div>
       </div>
     `;
-  } else if (product.category === 'bakery') {
-    optionsContainer.innerHTML = `
-      <div class="option-group">
-        <h4>ประเภทการบริการ</h4>
-        <div class="option-items">
-          <input type="radio" id="bake-warm" name="bakery-serve" value="อบร้อน" class="option-input" checked>
-          <label for="bake-warm" class="option-label">🔥 อบร้อน</label>
-          
-          <input type="radio" id="bake-normal" name="bakery-serve" value="ไม่ต้องอบร้อน" class="option-input">
-          <label for="bake-normal" class="option-label">🥖 ไม่ต้องอบร้อน</label>
-        </div>
-      </div>
-      <div class="option-group">
-        <h4>เพิ่มเติม</h4>
-        <div class="option-items">
-          <input type="checkbox" id="addon-whip-bakery" value="วิปครีม (+15฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-whip-bakery" class="option-label">+ วิปครีม (+฿15)</label>
-          
-          <input type="checkbox" id="addon-jam" value="เนย/แยมสตรอเบอร์รี่ (+10฿)" class="option-input" onchange="calculateModalPrice()">
-          <label for="addon-jam" class="option-label">+ เนย/แยม (+฿10)</label>
-        </div>
-      </div>
-    `;
-  }
+  } 
   
   document.getElementById('modal-qty').innerText = currentQty;
   calculateModalPrice();
@@ -690,7 +667,7 @@ function submitOrder() {
   
   if (customerNameEl && customerPhoneEl) {
     if (!customerNameEl.value.trim() || !customerPhoneEl.value.trim()) {
-      alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วนก่อนยืนยันการสั่งซื้อครับ');
+      alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วนก่อนยืนยันการสั่งซื้อ');
       return;
     }
   }

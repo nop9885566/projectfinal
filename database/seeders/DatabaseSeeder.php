@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // สร้างผู้ใช้เริ่มต้น
         if (!User::where('email', 'admin@example.com')->exists()) {
             User::create([
-                'name' => 'แอดมิน ร้านบารจง',
+                'name' => 'แอดมิน ร้านบรรจง',
                 'email' => 'admin@example.com',
                 'password' => bcrypt('password'),
                 'role' => 'admin',
@@ -58,17 +58,6 @@ class DatabaseSeeder extends Seeder
                 ['name' => 'Fruit Soda', 'category' => 'noncoffee', 'price' => 70.00, 'description' => 'โซดาผลไม้สดสดชื่น หลายรสชาติให้เลือก', 'is_available' => true],
                 ['name' => 'Hot Chocolate', 'category' => 'noncoffee', 'price' => 75.00, 'description' => 'ช็อกโกแลตเบลเยี่ยมแท้ เข้มข้น หอมหวาน', 'is_available' => true],
 
-                // Bakery
-                ['name' => 'Butter Croissant', 'category' => 'bakery', 'price' => 55.00, 'description' => 'ครัวซองค์เนยแท้ อบสด กรอบนอก นุ่มใน', 'is_available' => true],
-                ['name' => 'Banana Muffin', 'category' => 'bakery', 'price' => 45.00, 'description' => 'มัฟฟินกล้วยหอม นุ่ม หอมหวาน', 'is_available' => true],
-                ['name' => 'Classic Scones', 'category' => 'bakery', 'price' => 60.00, 'description' => 'สโคนสูตรอังกฤษ เสิร์ฟพร้อมแยมและครีม', 'is_available' => true],
-                ['name' => 'Cinnamon Roll', 'category' => 'bakery', 'price' => 65.00, 'description' => 'ซินนาบอนสูตรพิเศษ อบสด หอมอบเชย', 'is_available' => true],
-
-                // Food
-                ['name' => 'Brunch Set', 'category' => 'food', 'price' => 150.00, 'description' => 'ไข่ ขนมปัง เบคอน สลัด ครบในจานเดียว', 'is_available' => true],
-                ['name' => 'Club Sandwich', 'category' => 'food', 'price' => 120.00, 'description' => 'แซนวิชหน้าไก่ ชีส มะเขือเทศ เสิร์ฟพร้อมมันฝรั่ง', 'is_available' => true],
-                ['name' => 'Creamy Pasta', 'category' => 'food', 'price' => 140.00, 'description' => 'พาสต้าซอสครีม ไก่ย่าง เห็ด หอมกรุ่น', 'is_available' => true],
-                ['name' => 'ข้าวหน้าไก่ย่าง', 'category' => 'food', 'price' => 110.00, 'description' => 'ข้าวหน้าไก่ย่างสมุนไพร ราดซอสพิเศษ เสิร์ฟร้อน', 'is_available' => true],
             ];
 
             foreach ($defaultProducts as $product) {

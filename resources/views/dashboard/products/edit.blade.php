@@ -47,7 +47,7 @@
                   style="width:100%;padding:.8rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
             <option value="coffee"    {{ old('category', $product->category)=='coffee'    ? 'selected' : '' }}>☕ Coffee</option>
             <option value="noncoffee" {{ old('category', $product->category)=='noncoffee' ? 'selected' : '' }}>🧋 Non-Coffee</option>
-            <option value="bakery"    {{ old('category', $product->category)=='bakery'    ? 'selected' : '' }}>🥐 Bakery</option>
+            <option value="cake"    {{ old('category', $product->category)=='cake'    ? 'selected' : '' }}>🍰 cake</option>
             
           </select>
         </div>
