@@ -276,7 +276,7 @@
 
     {{-- Coffee --}}
     <div class="menu-tab-content active" id="tab-coffee">
-      @php $coffeeSubcategories = ['Special', 'Black', 'White', 'Milk']; @endphp
+      @php $coffeeSubcategories = ['Special', 'Black', 'White']; @endphp
       @foreach($coffeeSubcategories as $subcat)
         @php $subcatProducts = $products->where('category', 'coffee')->where('subcategory', $subcat); @endphp
         @if($subcatProducts->isNotEmpty())
@@ -295,7 +295,7 @@
 
     {{-- Non-Coffee --}}
     <div class="menu-tab-content" id="tab-noncoffee" style="display:none;">
-      @php $noncoffeeSubcategories = ['Cocoa', 'Tea', 'Refreshing']; @endphp
+      @php $noncoffeeSubcategories = ['Milk', 'Cocoa', 'Tea', 'Refreshing']; @endphp
       @foreach($noncoffeeSubcategories as $subcat)
         @php $subcatProducts = $products->where('category', 'noncoffee')->where('subcategory', $subcat); @endphp
         @if($subcatProducts->isNotEmpty())
