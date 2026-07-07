@@ -271,7 +271,7 @@
     <div class="menu-tabs" data-reveal>
       <button class="tab-btn active" onclick="switchTab('coffee', this)">☕ Coffee</button>
       <button class="tab-btn" onclick="switchTab('noncoffee', this)">🧋 Non-Coffee</button>
-      <button class="tab-btn" onclick="switchTab('bakery', this)">🍰 Cake</button>
+      <button class="tab-btn" onclick="switchTab('cake', this)">🍰 Cake</button>
     </div>
 
     {{-- Coffee --}}
@@ -313,9 +313,9 @@
     </div>
 
     {{-- Cake --}}
-    <div class="menu-tab-content" id="tab-bakery" style="display:none;">
+    <div class="menu-tab-content" id="tab-cake" style="display:none;">
       <div class="menu-grid" style="display:grid; margin-top:2rem;">
-        @forelse($products->where('category', 'bakery') as $product)
+        @forelse($products->where('category', 'cake') as $product)
           @include('partials.menu-card', compact('product'))
         @empty
           <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเค้กในขณะนี้</div>
@@ -460,7 +460,7 @@ function openOrderModal(product) {
   } else {
     let emoji = '☕';
     if (product.category === 'noncoffee') emoji = '🧋';
-    else if (product.category === 'bakery') emoji = '🍰';
+    else if (product.category === 'cake') emoji = '🍰';
     imgBox.innerHTML = `<span style="font-size:4rem">${emoji}</span>`;
   }
   
@@ -528,8 +528,8 @@ function calculateModalPrice() {
     if (document.getElementById('addon-oat') && document.getElementById('addon-oat').checked) extra += 15;
     if (document.getElementById('addon-whip') && document.getElementById('addon-whip').checked) extra += 15;
     if (document.getElementById('addon-pearl') && document.getElementById('addon-pearl').checked) extra += 5;
-  } else if (currentProduct.category === 'bakery') {
-    if (document.getElementById('addon-whip-bakery') && document.getElementById('addon-whip-bakery').checked) extra += 15;
+  } else if (currentProduct.category === 'cake') {
+    if (document.getElementById('addon-whip-cake') && document.getElementById('addon-whip-cake').checked) extra += 15;
     if (document.getElementById('addon-jam') && document.getElementById('addon-jam').checked) extra += 10;
   }
   
@@ -563,11 +563,11 @@ function addModalItemToCart() {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });
-  } else if (currentProduct.category === 'bakery') {
-    const serveRadio = document.querySelector('input[name="bakery-serve"]:checked');
+  } else if (currentProduct.category === 'cake') {
+    const serveRadio = document.querySelector('input[name="cake-serve"]:checked');
     if (serveRadio) options.push(serveRadio.value);
     
-    ['addon-whip-bakery', 'addon-jam'].forEach(id => {
+    ['addon-whip-cake', 'addon-jam'].forEach(id => {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });

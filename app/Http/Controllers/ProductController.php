@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|in:coffee,noncoffee,bakery,food',
+            'category'    => 'required|in:coffee,noncoffee,cake,food',
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
             'image'       => 'nullable|image|max:2048',
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
         $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|in:coffee,noncoffee,bakery,food',
+            'category'    => 'required|in:coffee,noncoffee,cake,food',
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
             'image'       => 'nullable|image|max:2048',

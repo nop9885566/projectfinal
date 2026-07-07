@@ -6,7 +6,7 @@
       @php
         $emoji = '☕';
         if ($product->category === 'noncoffee') $emoji = '🧋';
-        elseif ($product->category === 'bakery') $emoji = '🥐';
+        elseif ($product->category === 'cake') $emoji = '🥐';
         elseif ($product->category === 'food') $emoji = '🍽️';
       @endphp
       <span style="font-size: 3.5rem;">{{ $emoji }}</span>
