@@ -185,7 +185,7 @@
     </div>
     <div class="footer-bottom">
       <p>© 2026 บรรจงคาเฟ่ (Barjong Cafe). All Rights Reserved.</p>
-      <p>Designed with ❤️ for coffee lovers</p>
+      <p>Designed with ❤️ for coffee loverss</p>
     </div>
   </div>
 </footer>
