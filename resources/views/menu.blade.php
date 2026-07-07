@@ -472,11 +472,11 @@ function openOrderModal(product) {
       <div class="option-group">
         <h4>ประเภทเครื่องดื่ม</h4>
         <div class="option-items">
-          <input type="radio" id="type-hot" name="drink-type" value="ร้อน" class="option-input" checked onchange="calculateModalPrice()">
-          <label for="type-hot" class="option-label">🔥 ร้อน</label>
-          
-          <input type="radio" id="type-iced" name="drink-type" value="เย็น" class="option-input" onchange="calculateModalPrice()">
+          <input type="radio" id="type-iced" name="drink-type" value="เย็น" class="option-input" checked onchange="calculateModalPrice()">
           <label for="type-iced" class="option-label">❄️ เย็น</label>
+
+          <input type="radio" id="type-hot" name="drink-type" value="ร้อน" class="option-input" onchange="calculateModalPrice()">
+          <label for="type-hot" class="option-label">🔥 ร้อน</label>
         </div>
       </div>
       <div class="option-group">
