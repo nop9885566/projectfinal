@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="บรรจงคาเฟ่ (Barjong Cafe) — กาแฟดี บรรยากาศธรรมชาติ พื้นที่แห่งการพักผ่อน" />
-  <title>บรรจงคาเฟ่ | Barjong Cafe</title>
+  <meta name="description" content="บรรจงคาเฟ่ (Banchong Cafe) — กาแฟดี บรรยากาศธรรมชาติ พื้นที่แห่งการพักผ่อน" />
+  <title>บรรจงคาเฟ่ | Banchong Cafe</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -184,7 +184,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 บรรจงคาเฟ่ (Barjong Cafe). All Rights Reserved.</p>
+      <p>© 2026 บรรจงคาเฟ่ (Banchong Cafe). All Rights Reserved.</p>
       <p>Designed with ❤️ for coffee loverss</p>
     </div>
   </div>

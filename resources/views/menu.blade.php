@@ -468,6 +468,42 @@ function openOrderModal(product) {
   optionsContainer.innerHTML = '';
   
   if (product.category === 'coffee' || product.category === 'noncoffee') {
+    let roastOption = '';
+    const nameLower = product.name.toLowerCase();
+    if (nameLower.includes('americano') || nameLower.includes('อเมริกาโน่')) {
+      roastOption = `
+      <div class="option-group">
+        <h4>ระดับการคั่ว</h4>
+        <div class="option-items">
+          <input type="radio" id="roast-dark" name="drink-roast" value="คั่วเข้ม" class="option-input" checked>
+          <label for="roast-dark" class="option-label">คั่วเข้ม</label>
+
+          <input type="radio" id="roast-medium" name="drink-roast" value="คั่วกลาง" class="option-input">
+          <label for="roast-medium" class="option-label">คั่วกลาง</label>
+
+          <input type="radio" id="roast-light" name="drink-roast" value="คั่วอ่อน" class="option-input">
+          <label for="roast-light" class="option-label">คั่วอ่อน</label>
+        </div>
+      </div>
+      `;
+    }
+
+    let styleOption = '';
+    if (nameLower.includes('latte') && nameLower.includes('pure')) {
+      styleOption = `
+      <div class="option-group">
+        <h4>รูปแบบ (Style)</h4>
+        <div class="option-items">
+          <input type="radio" id="style-latte" name="drink-style" value="Latte" class="option-input" checked>
+          <label for="style-latte" class="option-label">Latte</label>
+
+          <input type="radio" id="style-pure" name="drink-style" value="Pure" class="option-input">
+          <label for="style-pure" class="option-label">Pure</label>
+        </div>
+      </div>
+      `;
+    }
+
     optionsContainer.innerHTML = `
       <div class="option-group">
         <h4>ประเภทเครื่องดื่ม</h4>
@@ -479,6 +515,8 @@ function openOrderModal(product) {
           <label for="type-hot" class="option-label">🔥 ร้อน</label>
         </div>
       </div>
+      ${roastOption}
+      ${styleOption}
       <div class="option-group">
         <h4>ระดับความหวาน</h4>
         <div class="option-items">
@@ -556,7 +594,11 @@ function addModalItemToCart() {
   if (currentProduct.category === 'coffee' || currentProduct.category === 'noncoffee') {
     const typeRadio = document.querySelector('input[name="drink-type"]:checked');
     const sweetRadio = document.querySelector('input[name="drink-sweet"]:checked');
+    const roastRadio = document.querySelector('input[name="drink-roast"]:checked');
+    const styleRadio = document.querySelector('input[name="drink-style"]:checked');
     if (typeRadio) options.push(typeRadio.value);
+    if (roastRadio) options.push(roastRadio.value);
+    if (styleRadio) options.push(styleRadio.value);
     if (sweetRadio) options.push(sweetRadio.value);
     
     ['addon-shot', 'addon-oat', 'addon-whip', 'addon-pearl'].forEach(id => {
