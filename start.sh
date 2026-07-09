@@ -7,6 +7,7 @@ if [ ! -f .env ]; then
     cp .env.example .env || touch .env
 fi
 touch database/database.sqlite || true
+touch storage/database.sqlite || true
 
 echo "=== [1/5] Generating app key if missing ==="
 php artisan key:generate --no-interaction --force || true
@@ -16,7 +17,7 @@ mkdir -p storage/framework/{sessions,views,cache} storage/logs
 chmod -R 775 storage bootstrap/cache || true
 
 echo "=== [3/5] Running migrations ==="
-php artisan migrate --force --no-interaction || true
+php artisan migrate --force --seed --no-interaction || true
 
 echo "=== [4/5] Linking storage ==="
 php artisan storage:link || true

@@ -142,9 +142,9 @@ class OrderController extends Controller
         }
 
         if (auth()->check()) {
-            return redirect()->route('orders.index')->with('success', 'อัปโหลดสลิปสำเร็จ รอการตรวจสอบจากร้าน');
+            return redirect()->route('orders.queue', $order->id)->with('success', 'อัปโหลดสลิปสำเร็จ รอการตรวจสอบจากร้าน');
         } else {
-            return redirect()->route('menu')->with('success', 'ส่งคำสั่งซื้อและสลิปสำเร็จ! เรากำลังดำเนินการให้ครับ');
+            return redirect()->route('orders.queue', $order->id)->with('success', 'ส่งคำสั่งซื้อและสลิปสำเร็จ! เรากำลังดำเนินการให้ครับ');
         }
     }
 
@@ -179,10 +179,22 @@ class OrderController extends Controller
         }
 
         if (auth()->check()) {
-            return redirect()->route('orders.index')->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว กรุณาชำระเงินที่หน้าร้าน');
+            return redirect()->route('orders.queue', $order->id)->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว กรุณาชำระเงินที่หน้าร้าน');
         } else {
-            return redirect()->route('menu')->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว! กรุณาชำระเงินและรับสินค้าที่หน้าร้านครับ');
+            return redirect()->route('orders.queue', $order->id)->with('success', 'ส่งคำสั่งซื้อเรียบร้อยแล้ว! กรุณาชำระเงินและรับสินค้าที่หน้าร้านครับ');
         }
+    }
+
+
+    // หน้าระบบแสดงคิว
+    public function queue(Order $order)
+    {
+        // คำนวณคิวคร่าวๆ จากออเดอร์ที่ยังไม่เสร็จ (pending, confirmed, preparing) ที่มาก่อนออเดอร์นี้
+        $queueCount = Order::whereIn('status', ['pending', 'confirmed', 'preparing'])
+                           ->where('id', '<', $order->id)
+                           ->count();
+                           
+        return view('orders.queue', compact('order', 'queueCount'));
     }
 
     // พนักงาน/Admin ดูออเดอร์ทั้งหมด

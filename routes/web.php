@@ -28,6 +28,7 @@ Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])->name('orders.payment');
 Route::post('/orders/{order}/payment', [OrderController::class, 'uploadSlip'])->name('orders.uploadSlip');
 Route::post('/orders/{order}/pay-later', [OrderController::class, 'payLater'])->name('orders.payLater');
+Route::get('/orders/{order}/queue', [OrderController::class, 'queue'])->name('orders.queue');
 
 // พนักงาน + Admin (แดชบอร์ดและการจัดการเมนู)
 Route::middleware(['auth', 'role:staff,admin'])->group(function () {
