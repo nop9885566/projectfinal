@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="refresh" content="30"> <!-- Auto refresh every 30 seconds -->
   <title>ระบบคิว | บรรจงคาเฟ่</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -111,13 +112,46 @@
                 </div>
             @endif
 
-            <h3 class="queue-number">{{ $queueCount }}</h3>
-            <p class="queue-text">คิวที่รออยู่ข้างหน้าคุณ</p>
-            
-            <p class="queue-desc">
-                กรุณารอรับเครื่องดื่มที่หน้าร้านเมื่อถึงคิวของคุณ<br>
-                ระบบกำลังเตรียมเครื่องดื่มอย่างสุดฝีมือครับ ☕
-            </p>
+            @php
+                $statusColors = [
+                    'pending' => '#f39c12',
+                    'confirmed' => '#3498db',
+                    'preparing' => '#9b59b6',
+                    'completed' => '#2ecc71',
+                    'cancelled' => '#e74c3c'
+                ];
+                $statusText = [
+                    'pending' => 'รอยืนยันออเดอร์ / รอชำระเงิน',
+                    'confirmed' => 'รับออเดอร์แล้ว / รอคิว',
+                    'preparing' => 'กำลังเตรียมเครื่องดื่ม',
+                    'completed' => 'เสร็จสิ้น / รับเครื่องดื่มได้เลย!',
+                    'cancelled' => 'ยกเลิกออเดอร์'
+                ];
+                
+                $currentStatusColor = $statusColors[$order->status] ?? '#666';
+                $currentStatusText = $statusText[$order->status] ?? $order->status;
+            @endphp
+
+            <div style="margin: 0 0 2rem 0; padding: 1.2rem; border-radius: 12px; background: #fafafa; border: 2px solid {{ $currentStatusColor }}; text-align: center;">
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #666;">สถานะปัจจุบันของคุณ:</p>
+                <h3 style="margin: 0; color: {{ $currentStatusColor }}; font-size: 1.5rem; font-weight: 600;">
+                    <i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i> {{ $currentStatusText }}
+                </h3>
+            </div>
+
+            @if(in_array($order->status, ['completed', 'cancelled']))
+                <h3 class="queue-number" style="color: {{ $currentStatusColor }}; font-size: 3rem;">
+                    @if($order->status == 'completed') รับเครื่องดื่มได้เลย! @else ยกเลิก @endif
+                </h3>
+                <p class="queue-text">คิวของคุณเสร็จสิ้นแล้ว</p>
+            @else
+                <h3 class="queue-number">{{ $queueCount }}</h3>
+                <p class="queue-text">คิวที่รออยู่ข้างหน้าคุณ</p>
+                <p class="queue-desc">
+                    กรุณารอรับเครื่องดื่มที่หน้าร้านเมื่อถึงคิวของคุณ<br>
+                    ระบบจะอัปเดตสถานะอัตโนมัติทุกๆ 30 วินาที ☕
+                </p>
+            @endif
         </div>
         
         <div class="queue-footer">
