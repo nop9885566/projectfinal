@@ -470,7 +470,7 @@ function openOrderModal(product) {
   if (product.category === 'coffee' || product.category === 'noncoffee') {
     let roastOption = '';
     const nameLower = product.name.toLowerCase();
-    if (nameLower.includes('americano') || nameLower.includes('อเมริกาโน่')) {
+    if (nameLower.includes('americano') || nameLower.includes('อเมริกาโน')) {
       roastOption = `
       <div class="option-group">
         <h4>ระดับการคั่ว</h4>
@@ -489,7 +489,7 @@ function openOrderModal(product) {
     }
 
     let styleOption = '';
-    if (nameLower.includes('latte') && nameLower.includes('pure')) {
+    if (nameLower.includes('latte') || nameLower.includes('pure') || nameLower.includes('matcha') || nameLower.includes('มัทฉะ')) {
       styleOption = `
       <div class="option-group">
         <h4>รูปแบบ (Style)</h4>
