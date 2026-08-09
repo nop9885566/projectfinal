@@ -197,14 +197,29 @@ class OrderController extends Controller
         return view('orders.queue', compact('order', 'queueCount'));
     }
 
-    // พนักงาน/Admin ดูออเดอร์ทั้งหมด
-    public function manage()
+    // พนักงาน/Admin ดูออเดอร์
+    public function manage(Request $request)
     {
-        $orders = Order::with(['user', 'orderItems.product'])
-                       ->latest()
-                       ->get();
+        $filter = $request->query('filter', 'active');
 
-        return view('dashboard.orders.index', compact('orders'));
+        $query = Order::with(['user', 'orderItems.product']);
+
+        if ($filter === 'completed') {
+            $query->where('status', 'completed');
+        } elseif ($filter === 'all') {
+            // ดูทั้งหมด
+        } else {
+            // ค่าเริ่มต้น ('active'): แสดงเฉพาะออเดอร์ที่ยังไม่เสร็จ
+            $query->where('status', '!=', 'completed');
+        }
+
+        $orders = $query->latest()->get();
+
+        $activeCount = Order::where('status', '!=', 'completed')->count();
+        $completedCount = Order::where('status', 'completed')->count();
+        $allCount = Order::count();
+
+        return view('dashboard.orders.index', compact('orders', 'filter', 'activeCount', 'completedCount', 'allCount'));
     }
 
     // พนักงาน/Admin อัปเดตสถานะออเดอร์
