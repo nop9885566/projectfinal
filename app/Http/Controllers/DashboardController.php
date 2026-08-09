@@ -21,13 +21,11 @@ class DashboardController extends Controller
         $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'pending')->count();
         $totalProducts = Product::count();
-        $totalUsers = User::count();
 
         return view('dashboard', compact(
             'totalOrders',
             'pendingOrders',
-            'totalProducts',
-            'totalUsers'
+            'totalProducts'
         ));
     }
 }

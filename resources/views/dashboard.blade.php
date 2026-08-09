@@ -39,11 +39,6 @@
         <div style="font-size:2rem;font-weight:700">{{ $totalProducts }}</div>
         <div>เมนูทั้งหมด</div>
       </div>
-      <div class="contact-card" style="text-align:center">
-        <div style="font-size:2.5rem;color:#9b59b6"><i class="fa-solid fa-users"></i></div>
-        <div style="font-size:2rem;font-weight:700">{{ $totalUsers }}</div>
-        <div>ผู้ใช้ทั้งหมด</div>
-      </div>
     </div>
 
     {{-- Quick Links --}}
