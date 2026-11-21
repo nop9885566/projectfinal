@@ -1,6 +1,6 @@
 FROM php:8.4-apache
 
-# Install system dependencies
+# Install system dependencies & Node.js
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    ca-certificates
+    ca-certificates \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -29,8 +31,11 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . .
 
-# Install production dependencies
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+
+# Install Frontend dependencies & build Vite assets
+RUN npm install && npm run build
 
 # Set permissions for Laravel storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
