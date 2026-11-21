@@ -13,8 +13,12 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/menu', function () {
-    $products = \App\Models\Product::where('is_available', true)->get();
-    return view('menu', compact('products'));
+    $categories = \App\Models\Category::with(['subcategories' => function ($q) {
+        $q->orderBy('sort_order');
+    }])->orderBy('sort_order')->get();
+    $products = \App\Models\Product::with(['category', 'subcategory'])
+        ->where('is_available', true)->get();
+    return view('menu', compact('products', 'categories'));
 })->name('menu');
 
 

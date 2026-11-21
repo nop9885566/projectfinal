@@ -46,7 +46,7 @@
           <tr style="border-bottom:1px solid #eee">
             <td style="padding:1rem" class="hide-on-mobile">{{ $product->id }}</td>
             <td style="padding:1rem">{{ $product->name }}</td>
-            <td style="padding:1rem" class="hide-on-mobile">{{ $product->category }}</td>
+            <td style="padding:1rem" class="hide-on-mobile">{{ $product->category?->name ?? '-' }}{{ $product->subcategory ? ' / ' . $product->subcategory->name : '' }}</td>
             <td style="padding:1rem; white-space:nowrap;">฿{{ number_format($product->price, 2) }}</td>
             <td style="padding:1rem" class="hide-on-mobile">
               @if($product->is_available)

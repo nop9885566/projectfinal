@@ -3,30 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with(['category', 'subcategory'])->get();
         return view('dashboard.products.index', compact('products'));
     }
 
     public function create()
     {
-        return view('dashboard.products.create');
+        $categories = Category::with('subcategories')->orderBy('sort_order')->get();
+        return view('dashboard.products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'        => 'required|string|max:255',
-            'category'    => 'required|in:coffee,noncoffee,cake,food',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'image'       => 'nullable|image|max:2048',
-            'is_available'=> 'boolean',
+            'name'           => 'required|string|max:255',
+            'category_id'    => 'required|exists:categories,id',
+            'subcategory_id' => 'nullable|exists:subcategories,id',
+            'description'    => 'nullable|string',
+            'price'          => 'required|numeric|min:0',
+            'image'          => 'nullable|image|max:2048',
+            'is_available'   => 'boolean',
         ]);
 
         $data = $request->all();
@@ -46,7 +50,8 @@ class ProductController extends Controller
         if (auth()->user()->role === 'staff') {
             abort(403, 'พนักงานสามารถเพิ่มและลบเมนูได้เท่านั้น ไม่สามารถแก้ไขเมนูได้');
         }
-        return view('dashboard.products.edit', compact('product'));
+        $categories = Category::with('subcategories')->orderBy('sort_order')->get();
+        return view('dashboard.products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
@@ -56,12 +61,13 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            'name'        => 'required|string|max:255',
-            'category'    => 'required|in:coffee,noncoffee,cake,food',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'image'       => 'nullable|image|max:2048',
-            'is_available'=> 'boolean',
+            'name'           => 'required|string|max:255',
+            'category_id'    => 'required|exists:categories,id',
+            'subcategory_id' => 'nullable|exists:subcategories,id',
+            'description'    => 'nullable|string',
+            'price'          => 'required|numeric|min:0',
+            'image'          => 'nullable|image|max:2048',
+            'is_available'   => 'boolean',
         ]);
 
         $data = $request->all();

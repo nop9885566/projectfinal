@@ -18,7 +18,7 @@ return new class extends Migration
         });
 
         // Hide old products so they don't break existing order items but stop showing on menu
-        \App\Models\Product::where('is_available', true)->update(['is_available' => false]);
+        \Illuminate\Support\Facades\DB::table('products')->where('is_available', true)->update(['is_available' => false]);
 
         $defaultProducts = [
             // Coffee - Special (55.-)
@@ -95,7 +95,7 @@ return new class extends Migration
         ];
 
         foreach ($defaultProducts as $p) {
-            \App\Models\Product::updateOrCreate(
+            \Illuminate\Support\Facades\DB::table('products')->updateOrInsert(
                 ['name' => $p['name']],
                 [
                     'category' => $p['category'],
@@ -103,6 +103,8 @@ return new class extends Migration
                     'price' => $p['price'],
                     'description' => $p['description'],
                     'is_available' => true,
+                    'updated_at' => now(),
+                    'created_at' => now(),
                 ]
             );
         }

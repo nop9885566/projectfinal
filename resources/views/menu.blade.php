@@ -269,59 +269,49 @@
     </div>
 
     <div class="menu-tabs" data-reveal>
-      <button class="tab-btn active" onclick="switchTab('coffee', this)">☕ Coffee</button>
-      <button class="tab-btn" onclick="switchTab('noncoffee', this)">🧋 Non-Coffee</button>
-      <button class="tab-btn" onclick="switchTab('cake', this)">🍰 Cake</button>
+      @foreach($categories as $idx => $cat)
+        <button class="tab-btn {{ $idx === 0 ? 'active' : '' }}" onclick="switchTab('{{ $cat->slug }}', this)">{{ $cat->emoji }} {{ $cat->name }}</button>
+      @endforeach
     </div>
 
-    {{-- Coffee --}}
-    <div class="menu-tab-content active" id="tab-coffee">
-      @php $coffeeSubcategories = ['Special', 'Black', 'White']; @endphp
-      @foreach($coffeeSubcategories as $subcat)
-        @php $subcatProducts = $products->where('category', 'coffee')->where('subcategory', $subcat); @endphp
-        @if($subcatProducts->isNotEmpty())
-          <h3 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; color:var(--brown-dark); border-bottom:2px solid var(--beige); padding-bottom:0.5rem">{{ $subcat }}</h3>
-          <div class="menu-grid" style="display:grid;">
-            @foreach($subcatProducts as $product)
+    @foreach($categories as $idx => $cat)
+    <div class="menu-tab-content {{ $idx === 0 ? 'active' : '' }}" id="tab-{{ $cat->slug }}" @if($idx > 0) style="display:none;" @endif>
+      @php $catProducts = $products->where('category_id', $cat->id); @endphp
+      @if($cat->subcategories->isNotEmpty())
+        @foreach($cat->subcategories as $subcat)
+          @php $subcatProducts = $catProducts->where('subcategory_id', $subcat->id); @endphp
+          @if($subcatProducts->isNotEmpty())
+            <h3 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; color:var(--brown-dark); border-bottom:2px solid var(--beige); padding-bottom:0.5rem">{{ $subcat->name }}</h3>
+            <div class="menu-grid" style="display:grid;">
+              @foreach($subcatProducts as $product)
+                @include('partials.menu-card', compact('product'))
+              @endforeach
+            </div>
+          @endif
+        @endforeach
+        {{-- แสดงสินค้าที่ไม่มี subcategory --}}
+        @php $noSubProducts = $catProducts->whereNull('subcategory_id'); @endphp
+        @if($noSubProducts->isNotEmpty())
+          <div class="menu-grid" style="display:grid; margin-top:2rem;">
+            @foreach($noSubProducts as $product)
               @include('partials.menu-card', compact('product'))
             @endforeach
           </div>
         @endif
-      @endforeach
-      @if($products->where('category', 'coffee')->isEmpty())
-        <div style="text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูกาแฟในขณะนี้</div>
+      @else
+        <div class="menu-grid" style="display:grid; margin-top:2rem;">
+          @forelse($catProducts as $product)
+            @include('partials.menu-card', compact('product'))
+          @empty
+            <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูในหมวดนี้ในขณะนี้</div>
+          @endforelse
+        </div>
+      @endif
+      @if($catProducts->isEmpty())
+        <div style="text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูในหมวดนี้ในขณะนี้</div>
       @endif
     </div>
-
-    {{-- Non-Coffee --}}
-    <div class="menu-tab-content" id="tab-noncoffee" style="display:none;">
-      @php $noncoffeeSubcategories = ['Milk', 'Cocoa', 'Tea', 'Refreshing']; @endphp
-      @foreach($noncoffeeSubcategories as $subcat)
-        @php $subcatProducts = $products->where('category', 'noncoffee')->where('subcategory', $subcat); @endphp
-        @if($subcatProducts->isNotEmpty())
-          <h3 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; color:var(--brown-dark); border-bottom:2px solid var(--beige); padding-bottom:0.5rem">{{ $subcat }}</h3>
-          <div class="menu-grid" style="display:grid;">
-            @foreach($subcatProducts as $product)
-              @include('partials.menu-card', compact('product'))
-            @endforeach
-          </div>
-        @endif
-      @endforeach
-      @if($products->where('category', 'noncoffee')->isEmpty())
-        <div style="text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเครื่องดื่มทั่วไปในขณะนี้</div>
-      @endif
-    </div>
-
-    {{-- Cake --}}
-    <div class="menu-tab-content" id="tab-cake" style="display:none;">
-      <div class="menu-grid" style="display:grid; margin-top:2rem;">
-        @forelse($products->where('category', 'cake') as $product)
-          @include('partials.menu-card', compact('product'))
-        @empty
-          <div style="grid-column: 1/-1; text-align:center; color:var(--text-light); padding:3rem">ไม่มีเมนูเค้กในขณะนี้</div>
-        @endforelse
-      </div>
-    </div>
+    @endforeach
   </div>
 </section>
 
@@ -459,15 +449,15 @@ function openOrderModal(product) {
     imgBox.innerHTML = `<img src="${product.image}" alt="${product.name}">`;
   } else {
     let emoji = '☕';
-    if (product.category === 'noncoffee') emoji = '🧋';
-    else if (product.category === 'cake') emoji = '🍰';
+    if (product.category_slug === 'noncoffee') emoji = '🧋';
+    else if (product.category_slug === 'cake') emoji = '🍰';
     imgBox.innerHTML = `<span style="font-size:4rem">${emoji}</span>`;
   }
   
   const optionsContainer = document.getElementById('options-form-container');
   optionsContainer.innerHTML = '';
   
-  if (product.category === 'coffee' || product.category === 'noncoffee') {
+  if (product.category_slug === 'coffee' || product.category_slug === 'noncoffee') {
     let roastOption = '';
     const nameLower = product.name.toLowerCase();
     if (nameLower.includes('americano') || nameLower.includes('อเมริกาโน')) {
@@ -561,12 +551,12 @@ function calculateModalPrice() {
   let base = parseFloat(currentProduct.price);
   let extra = 0;
   
-  if (currentProduct.category === 'coffee' || currentProduct.category === 'noncoffee') {
+  if (currentProduct.category_slug === 'coffee' || currentProduct.category_slug === 'noncoffee') {
     if (document.getElementById('addon-shot') && document.getElementById('addon-shot').checked) extra += 20;
     if (document.getElementById('addon-oat') && document.getElementById('addon-oat').checked) extra += 15;
     if (document.getElementById('addon-whip') && document.getElementById('addon-whip').checked) extra += 15;
     if (document.getElementById('addon-pearl') && document.getElementById('addon-pearl').checked) extra += 5;
-  } else if (currentProduct.category === 'cake') {
+  } else if (currentProduct.category_slug === 'cake') {
     if (document.getElementById('addon-whip-cake') && document.getElementById('addon-whip-cake').checked) extra += 15;
     if (document.getElementById('addon-jam') && document.getElementById('addon-jam').checked) extra += 10;
   }
@@ -591,7 +581,7 @@ function closeOrderModal() {
 function addModalItemToCart() {
   let options = [];
   
-  if (currentProduct.category === 'coffee' || currentProduct.category === 'noncoffee') {
+  if (currentProduct.category_slug === 'coffee' || currentProduct.category_slug === 'noncoffee') {
     const typeRadio = document.querySelector('input[name="drink-type"]:checked');
     const sweetRadio = document.querySelector('input[name="drink-sweet"]:checked');
     const roastRadio = document.querySelector('input[name="drink-roast"]:checked');
@@ -605,7 +595,7 @@ function addModalItemToCart() {
       const el = document.getElementById(id);
       if (el && el.checked) options.push(el.value);
     });
-  } else if (currentProduct.category === 'cake') {
+  } else if (currentProduct.category_slug === 'cake') {
     const serveRadio = document.querySelector('input[name="cake-serve"]:checked');
     if (serveRadio) options.push(serveRadio.value);
     

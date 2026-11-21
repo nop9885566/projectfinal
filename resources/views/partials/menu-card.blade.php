@@ -4,10 +4,7 @@
       <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width:100%; height:100%; object-fit:contain; padding:10px;">
     @else
       @php
-        $emoji = '☕';
-        if ($product->category === 'noncoffee') $emoji = '🧋';
-        elseif ($product->category === 'cake') $emoji = '🥐';
-        elseif ($product->category === 'food') $emoji = '🍽️';
+        $emoji = $product->category?->emoji ?? '☕';
       @endphp
       <span style="font-size: 3.5rem;">{{ $emoji }}</span>
     @endif
@@ -22,7 +19,7 @@
             "id" => $product->id,
             "name" => $product->name,
             "price" => (float)$product->price,
-            "category" => $product->category,
+            "category_slug" => $product->category?->slug,
             "image" => $product->image ? asset("storage/" . $product->image) : null
         ];
       @endphp

@@ -42,12 +42,23 @@
 
         <div style="margin-bottom:1rem">
           <label style="display:block;margin-bottom:.5rem;font-weight:500">หมวดหมู่ *</label>
-          <select name="category"
+          <select name="category_id" id="category_id"
+                  style="width:100%;padding:.8rem;border:1px solid #ddd;border-radius:8px;font-family:inherit"
+                  onchange="updateSubcategories()">
+            <option value="">-- เลือกหมวดหมู่ --</option>
+            @foreach($categories as $cat)
+              <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
+                {{ $cat->emoji }} {{ $cat->name }}
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <div style="margin-bottom:1rem">
+          <label style="display:block;margin-bottom:.5rem;font-weight:500">หมวดหมู่ย่อย</label>
+          <select name="subcategory_id" id="subcategory_id"
                   style="width:100%;padding:.8rem;border:1px solid #ddd;border-radius:8px;font-family:inherit">
-            <option value="coffee"    {{ old('category')=='coffee'    ? 'selected' : '' }}>☕ Coffee</option>
-            <option value="noncoffee" {{ old('category')=='noncoffee' ? 'selected' : '' }}>🧋 Non-Coffee</option>
-            <option value="cake"    {{ old('category')=='cake'    ? 'selected' : '' }}>🍰 cake</option>
-            
+            <option value="">-- ไม่มี --</option>
           </select>
         </div>
 
@@ -88,6 +99,29 @@
   </div>
 </div>
 
+<script>
+  const subcategoriesByCategory = @json($categories->pluck('subcategories', 'id'));
+  const oldSubcategoryId = {{ old('subcategory_id', 'null') }};
+
+  function updateSubcategories() {
+    const catId = document.getElementById('category_id').value;
+    const subSelect = document.getElementById('subcategory_id');
+    subSelect.innerHTML = '<option value="">-- ไม่มี --</option>';
+
+    if (catId && subcategoriesByCategory[catId]) {
+      subcategoriesByCategory[catId].forEach(sub => {
+        const opt = document.createElement('option');
+        opt.value = sub.id;
+        opt.textContent = sub.name;
+        if (sub.id == oldSubcategoryId) opt.selected = true;
+        subSelect.appendChild(opt);
+      });
+    }
+  }
+
+  // โหลดครั้งแรก
+  updateSubcategories();
+</script>
 
 </body>
 </html>
