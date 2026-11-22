@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Services\LineBotService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class CafeApiController extends Controller
 {
@@ -161,23 +162,10 @@ class CafeApiController extends Controller
             ->where('id', '<', $order->id)
             ->count();
 
-        // ส่งแจ้งเตือนเข้า LINE ทันที
-        try {
-            $lineBot = app(LineBotService::class);
-            $message = "☕ มีออเดอร์ใหม่เข้ามา (จากเว็บ/แอป)!\n";
-            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
-            $message .= "ลูกค้า: " . $order->customer_name . "\n";
-            $message .= "เบอร์โทร: " . ($order->customer_phone ?: 'ไม่ระบุ') . "\n";
-            if (!empty($order->note)) {
-                $message .= "หมายเหตุ: " . $order->note . "\n";
-            }
-            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
-            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
-
-            $lineBot->sendTextMessage($message);
-            Log::info("LINE Notification sent for Order #{$order->id}");
-        } catch (\Exception $e) {
-            Log::error("LINE Notification failed on createOrder: " . $e->getMessage());
+        // หากมีการระบุ payment_method ว่าจ่ายภายหลังตั้งแต่ตอนสร้างออเดอร์ ให้ส่งแจ้งเตือนทันที
+        if ($request->input('payment_method') === 'pay_later') {
+            $this->sendOrderNotification($order, "⏳ จ่ายเงินภายหลัง (หน้าร้าน)");
+            Cache::put("line_notified_order_{$order->id}", true, now()->addDays(1));
         }
 
         return response()->json([
@@ -206,19 +194,25 @@ class CafeApiController extends Controller
 
     /**
      * POST /api/orders/{id}/pay-later
-     * แจ้งชำระภายหลัง
+     * แจ้งชำระภายหลัง (หน้าร้าน)
      */
     public function payLater(int $id)
     {
         $order = Order::with('orderItems.product')->findOrFail($id);
         Log::info("Order #{$order->id} pay later selected by customer.");
 
+        $cacheKey = "line_notified_order_{$order->id}";
+        if (!Cache::has($cacheKey)) {
+            $this->sendOrderNotification($order, "⏳ จ่ายเงินภายหลัง (หน้าร้าน)");
+            Cache::put($cacheKey, true, now()->addDays(1));
+        }
+
         return response()->json(['success' => true, 'message' => 'บันทึกเรียบร้อย']);
     }
 
     /**
      * POST /api/orders/{id}/payment
-     * อัปโหลดสลิป
+     * อัปโหลดสลิปชำระเงิน
      */
     public function uploadSlip(Request $request, int $id)
     {
@@ -235,27 +229,63 @@ class CafeApiController extends Controller
                 'payment_status' => 'paid',
             ]);
 
-            try {
-                $lineBot = app(LineBotService::class);
-                $message = "💰 แจ้งชำระเงิน (แนบสลิปแล้ว)!\n";
-                $message .= "รหัสออเดอร์: #" . $order->id . "\n";
-                $message .= "ลูกค้า: " . $order->customer_name . "\n";
-                $message .= "ยอดชำระ: ฿" . number_format($order->total_price, 2);
-
-                $imageUrl = asset('storage/' . $path);
-                $lineBot->sendImageMessage($message, $imageUrl);
-            } catch (\Exception $e) {
-                Log::error("LINE uploadSlip failed: " . $e->getMessage());
-            }
+            $imageUrl = asset('storage/' . $path);
+            $this->sendOrderNotification($order, "✅ จ่ายเงินแล้ว (แนบสลิป)", $imageUrl);
+            Cache::put("line_notified_order_{$order->id}", true, now()->addDays(1));
 
             return response()->json([
                 'success'  => true,
                 'message'  => 'อัปโหลดสลิปสำเร็จ',
-                'slip_url' => asset('storage/' . $path),
+                'slip_url' => $imageUrl,
             ]);
         }
 
         return response()->json(['success' => false, 'message' => 'ไม่พบไฟล์สลิป'], 400);
+    }
+
+    /**
+     * ส่งแจ้งเตือนออเดอร์เข้า LINE (ข้อความเดียวพร้อมระบุสถานะชำระเงินและรายการสั่งซื้อ)
+     */
+    private function sendOrderNotification(Order $order, string $paymentStatusText, ?string $slipUrl = null)
+    {
+        try {
+            $lineBot = app(LineBotService::class);
+            $order->loadMissing('orderItems.product');
+
+            $itemsText = "";
+            foreach ($order->orderItems as $item) {
+                $productName = $item->product ? $item->product->name : 'เครื่องดื่ม';
+                $itemsText .= "- " . $productName . " x" . $item->quantity;
+                if (!empty($item->options)) {
+                    $itemsText .= " (" . $item->options . ")";
+                }
+                $itemsText .= "\n";
+            }
+
+            $isPaid = !empty($slipUrl) || $order->payment_status === 'paid' || $order->payment_status === 'verified';
+            $header = $isPaid ? "☕ มีออเดอร์ใหม่เข้ามา (จ่ายเงินแล้ว)!" : "☕ มีออเดอร์ใหม่เข้ามา (จากเว็บ/แอป)!";
+
+            $message = "{$header}\n";
+            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+            $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            $message .= "เบอร์โทร: " . ($order->customer_phone ?: 'ไม่ระบุ') . "\n";
+            $message .= "สถานะชำระเงิน: " . $paymentStatusText . "\n";
+            if (!empty($order->note)) {
+                $message .= "หมายเหตุ: " . $order->note . "\n";
+            }
+            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
+            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
+
+            if ($slipUrl) {
+                $lineBot->sendImageMessage($message, $slipUrl);
+            } else {
+                $lineBot->sendTextMessage($message);
+            }
+
+            Log::info("LINE Notification sent for Order #{$order->id} ({$paymentStatusText})");
+        } catch (\Exception $e) {
+            Log::error("LINE Notification failed for Order #{$order->id}: " . $e->getMessage());
+        }
     }
 
     /**
