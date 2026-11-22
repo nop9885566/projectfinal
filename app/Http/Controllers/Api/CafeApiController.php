@@ -8,13 +8,15 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\LineBotService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CafeApiController extends Controller
 {
     /**
      * GET /api/products
-     * ดึงรายการสินค้าทั้งหมด (รองรับ filter ตาม category, subcategory, is_available, search)
+     * ดึงรายการสินค้าทั้งหมด
      */
     public function products(Request $request)
     {
@@ -91,22 +93,29 @@ class CafeApiController extends Controller
      */
     public function createOrder(Request $request)
     {
+        Log::info('New API Order Request received:', $request->all());
+
         $request->validate([
             'customer_name'    => 'required|string|max:255',
             'customer_phone'   => 'required|string|max:20',
             'note'             => 'nullable|string',
             'items'            => 'required|array|min:1',
-            'items.*.id'       => 'required|exists:products,id',
+            'items.*.id'       => 'required',
             'items.*.qty'      => 'required|integer|min:1',
             'items.*.options'  => 'nullable|string',
         ]);
 
         $total = 0;
         $orderItems = [];
+        $itemsText = "";
 
         foreach ($request->items as $item) {
-            $product = Product::findOrFail($item['id']);
-            $itemPrice = $product->price;
+            $product = Product::find($item['id']);
+            if (!$product) {
+                $product = Product::where('name', $item['name'] ?? '')->first();
+            }
+
+            $itemPrice = $product ? $product->price : (float)($item['unit_price'] ?? 50.0);
             $optionsText = $item['options'] ?? '';
 
             // บวกราคาเพิ่มตามออปชั่น
@@ -120,11 +129,18 @@ class CafeApiController extends Controller
             $subtotal = $itemPrice * $item['qty'];
             $total += $subtotal;
             $orderItems[] = [
-                'product_id' => $product->id,
+                'product_id' => $product ? $product->id : null,
                 'quantity'   => $item['qty'],
                 'price'      => $itemPrice,
                 'options'    => $optionsText ?: null,
             ];
+
+            $productName = $product ? $product->name : ($item['name'] ?? 'เครื่องดื่ม');
+            $itemsText .= "- " . $productName . " x" . $item['qty'];
+            if ($optionsText) {
+                $itemsText .= " (" . $optionsText . ")";
+            }
+            $itemsText .= "\n";
         }
 
         $order = Order::create([
@@ -140,10 +156,29 @@ class CafeApiController extends Controller
         $order->orderItems()->createMany($orderItems);
         $order->load('orderItems.product');
 
-        // คำนวณคิว
+        // คำนวณคิวก่อนหน้า
         $queueAhead = Order::whereIn('status', ['pending', 'confirmed', 'preparing'])
             ->where('id', '<', $order->id)
             ->count();
+
+        // ส่งแจ้งเตือนเข้า LINE ทันที
+        try {
+            $lineBot = app(LineBotService::class);
+            $message = "☕ มีออเดอร์ใหม่เข้ามา (จากเว็บ/แอป)!\n";
+            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+            $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            $message .= "เบอร์โทร: " . ($order->customer_phone ?: 'ไม่ระบุ') . "\n";
+            if (!empty($order->note)) {
+                $message .= "หมายเหตุ: " . $order->note . "\n";
+            }
+            $message .= "รายการสั่งซื้อ:\n" . $itemsText;
+            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
+
+            $lineBot->sendTextMessage($message);
+            Log::info("LINE Notification sent for Order #{$order->id}");
+        } catch (\Exception $e) {
+            Log::error("LINE Notification failed on createOrder: " . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,
@@ -175,7 +210,20 @@ class CafeApiController extends Controller
      */
     public function payLater(int $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderItems.product')->findOrFail($id);
+
+        try {
+            $lineBot = app(LineBotService::class);
+            $message = "⏳ ลูกค้าแจ้งขอชำระเงินภายหลัง (หน้าร้าน)!\n";
+            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+            $message .= "ลูกค้า: " . $order->customer_name . "\n";
+            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
+
+            $lineBot->sendTextMessage($message);
+        } catch (\Exception $e) {
+            Log::error("LINE payLater failed: " . $e->getMessage());
+        }
+
         return response()->json(['success' => true, 'message' => 'บันทึกเรียบร้อย']);
     }
 
@@ -189,7 +237,7 @@ class CafeApiController extends Controller
             'slip_image' => 'required|image|max:5120',
         ]);
 
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderItems.product')->findOrFail($id);
 
         if ($request->hasFile('slip_image')) {
             $path = $request->file('slip_image')->store('slips', 'public');
@@ -197,6 +245,19 @@ class CafeApiController extends Controller
                 'slip_image'     => $path,
                 'payment_status' => 'paid',
             ]);
+
+            try {
+                $lineBot = app(LineBotService::class);
+                $message = "💰 แจ้งชำระเงิน (แนบสลิปแล้ว)!\n";
+                $message .= "รหัสออเดอร์: #" . $order->id . "\n";
+                $message .= "ลูกค้า: " . $order->customer_name . "\n";
+                $message .= "ยอดชำระ: ฿" . number_format($order->total_price, 2);
+
+                $imageUrl = asset('storage/' . $path);
+                $lineBot->sendImageMessage($message, $imageUrl);
+            } catch (\Exception $e) {
+                Log::error("LINE uploadSlip failed: " . $e->getMessage());
+            }
 
             return response()->json([
                 'success'  => true,
@@ -220,7 +281,7 @@ class CafeApiController extends Controller
             'customer_name'  => $order->customer_name,
             'customer_phone' => $order->customer_phone,
             'total_price'    => (float) $order->total_price,
-            'status'         => $order->status,
+            'status'         => strtoupper($order->status),
             'payment_status' => $order->payment_status ?? 'unpaid',
             'note'           => $order->note,
             'queue_ahead'    => $queueAhead,
@@ -228,7 +289,7 @@ class CafeApiController extends Controller
             'items'          => $order->orderItems->map(function ($item) {
                 return [
                     'product_id' => $item->product_id,
-                    'name'       => $item->product?->name ?? '',
+                    'name'       => $item->product?->name ?? 'เครื่องดื่ม',
                     'quantity'   => $item->quantity,
                     'price'      => (float) $item->price,
                     'options'    => $item->options,
@@ -237,4 +298,3 @@ class CafeApiController extends Controller
         ];
     }
 }
-
