@@ -211,18 +211,7 @@ class CafeApiController extends Controller
     public function payLater(int $id)
     {
         $order = Order::with('orderItems.product')->findOrFail($id);
-
-        try {
-            $lineBot = app(LineBotService::class);
-            $message = "⏳ ลูกค้าแจ้งขอชำระเงินภายหลัง (หน้าร้าน)!\n";
-            $message .= "รหัสออเดอร์: #" . $order->id . "\n";
-            $message .= "ลูกค้า: " . $order->customer_name . "\n";
-            $message .= "ยอดรวม: ฿" . number_format($order->total_price, 2);
-
-            $lineBot->sendTextMessage($message);
-        } catch (\Exception $e) {
-            Log::error("LINE payLater failed: " . $e->getMessage());
-        }
+        Log::info("Order #{$order->id} pay later selected by customer.");
 
         return response()->json(['success' => true, 'message' => 'บันทึกเรียบร้อย']);
     }
